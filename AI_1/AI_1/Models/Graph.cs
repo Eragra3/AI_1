@@ -19,9 +19,40 @@ namespace AI_1.Models
             Edges = new List<Edge>(200);
         }
 
+        public int GetMaxColor()
+        {
+            int k = 0;
+
+            foreach (var vertex in Vertices)
+            {
+                if (vertex.Color > k)
+                {
+                    k = vertex.Color;
+                }
+            }
+
+            return k;
+        }
+
         public string Print()
         {
-            return "";
+            StringBuilder result = new StringBuilder();
+            result.AppendLine(new string('-', 50));
+            result.AppendLine("GRAPH");
+            result.AppendLine(string.Format("edges: {0} vertices: {1}", Edges.Count, Vertices.Count));
+            result.AppendLine(string.Format("k: {0}", GetMaxColor()));
+
+            foreach (var edge in Edges)
+            {
+                result.AppendLine(edge.Print());
+            }
+            foreach (var vertex in Vertices)
+            {
+                result.AppendLine(vertex.Print());
+            }
+            result.AppendLine(new string('-', 50));
+
+            return result.ToString();
         }
     }
 }

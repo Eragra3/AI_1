@@ -61,6 +61,9 @@ namespace AI_1.Parser
                             secondVertexId = int.Parse(lineElements[1]);
                             weight = int.Parse(lineElements[2]);
 
+                            //skip loops in graph
+                            if (firstVertexId == secondVertexId) continue;
+
                             var edge = new Edge
                             {
                                 Vertex1ID = firstVertexId,
@@ -76,6 +79,28 @@ namespace AI_1.Parser
                 {
                     edge.Vertex1 = graph.Vertices[edge.Vertex1ID - 1];
                     edge.Vertex2 = graph.Vertices[edge.Vertex2ID - 1];
+                }
+
+                //remove disjoined vertices 
+                for (int i = 0; i < graph.Vertices.Count; i++)
+                {
+                    var vertex = graph.Vertices[i];
+
+                    var disjoined = true;
+
+                    for (int j = 0; disjoined && j < graph.Edges.Count; j++)
+                    {
+                        if (graph.Edges[j].Vertex1 == vertex || graph.Edges[j].Vertex2 == vertex)
+                        {
+                            disjoined = false;
+                        }
+                    }
+                    if (disjoined)
+                    {
+                        graph.Vertices.RemoveAt(i);
+                        //.NET remove empty spaces in lists, next item is now at current index
+                        i--;
+                    }
                 }
             }
             catch (FileNotFoundException e)

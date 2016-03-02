@@ -1,4 +1,6 @@
-﻿using AI_1.Parser;
+﻿using AI_1.Logic;
+using AI_1.Models;
+using AI_1.Parser;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -13,6 +15,8 @@ namespace AI_1
 {
     public partial class Form1 : Form
     {
+        private Graph graph;
+
         public Form1()
         {
             InitializeComponent();
@@ -27,18 +31,30 @@ namespace AI_1
         {
             var parse = new COLReader();
 
-            var graph = parse.ParseFile(Configuration.GEOM20);
-            Console.WriteLine(graph.Print());
+            graph = parse.ParseFile(Configuration.GEOM20);
+            //Console.WriteLine(graph.Print());
+            WriteToConsole(graph.Print());
         }
 
         public void WriteToConsole(string text)
         {
-            Console_AI.Text += text;
+            Console_AI.AppendText(text);
         }
 
         private void Console_AI_TextChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void randomizeButton_Click(object sender, EventArgs e)
+        {
+            if (graph != null)
+            {
+                var randomizer = new Randomizer();
+                randomizer.RandomizeColors(graph);
+
+                WriteToConsole(graph.Print());
+            }
         }
     }
 }
