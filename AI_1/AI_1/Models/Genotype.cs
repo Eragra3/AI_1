@@ -12,17 +12,20 @@ namespace AI_1.Models
 
         public Gene[] Genes { get; set; }
 
+        public int MaxID { get; set; }
+
         public Genotype(IList<Edge> edges, IList<int> verticesIds, int maxID)
         {
             Edges = edges;
 
             Genes = new Gene[maxID + 1];
 
-
             foreach (var id in verticesIds)
             {
                 Genes[id] = new Gene(id);
             }
+
+            MaxID = maxID;
         }
 
         public bool IsValid()
@@ -61,7 +64,7 @@ namespace AI_1.Models
             var maxColor = 0;
             foreach (var gene in Genes)
             {
-                if (maxColor < gene.color)
+                if (gene != null && maxColor < gene.color)
                 {
                     maxColor = gene.color;
                 }
@@ -89,10 +92,23 @@ namespace AI_1.Models
             }
 
             result.AppendLine(string.Format("edges: {0} vertices: {1}", Edges.Count, Genes.Count()));
-            result.AppendLine(string.Format("k: {0}", GetColorsCount()));
+            result.AppendLine(string.Format("colors: {0} k: {1}", GetColorsCount(), GetMaxColor()));
             result.AppendLine(new string('-', 50));
 
             return result.ToString();
+        }
+
+        public string Dump()
+        {
+            var colors = GetColorsCount().ToString().PadLeft(3, ' ');
+            var k = GetMaxColor().ToString().PadLeft(3, ' ');
+
+            var isValid = IsValid();
+            var isValidText = isValid ? string.Empty : "INVALID";
+
+            var text = string.Format("colors:{0} k:{1} valid:{2}", colors, k, isValidText);
+
+            return text;
         }
     }
 }

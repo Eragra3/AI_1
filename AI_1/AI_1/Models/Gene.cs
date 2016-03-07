@@ -15,6 +15,8 @@ namespace AI_1.Models
         public Gene(int id)
         {
             this.id = id;
+
+            color = 0;
         }
 
         public string Print()

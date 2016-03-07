@@ -15,7 +15,7 @@ namespace AI_1
 {
     public partial class Form1 : Form
     {
-        private Graph graph;
+        private GAExecutor executor;
 
         private IList<Genotype> genotypes;
 
@@ -33,9 +33,11 @@ namespace AI_1
         {
             var parse = new COLReader();
 
-            graph = parse.ParseFile(Configuration.GEOM100a);
-            //Console.WriteLine(graph.Print());
-            WriteToConsole(graph.Print());
+            var graph = parse.ParseFile(Configuration.GEOM100a);
+
+            executor = new GAExecutor(graph);
+
+            WriteToConsole(executor.LoadedGraph.Print());
         }
 
         public void WriteToConsole(string text)
@@ -50,9 +52,9 @@ namespace AI_1
 
         private void randomizeButton_Click(object sender, EventArgs e)
         {
-            if (graph != null)
+            if (executor != null)
             {
-                var bestG = GetRandomGenotype(graph);
+                var bestG = GetRandomGenotype(executor.LoadedGraph);
 
                 WriteToConsole(bestG.Print());
             }
@@ -60,18 +62,17 @@ namespace AI_1
 
         private void startAlgorithmButton_Click(object sender, EventArgs e)
         {
-            if (graph != null)
+            if (executor == null)
             {
-                var randomizer = new Randomizer();
+                var parse = new COLReader();
 
-                var startingGenotype = randomizer.GetRandomGenotype(graph);
+                var graph = parse.ParseFile(Configuration.GEOM100a);
 
-                var gaExecutor = new GAExecutor(startingGenotype);
-
-                genotypes.Add(startingGenotype);
+                executor = new GAExecutor(graph);
             }
+            var solution = executor.RunHeuristic();
 
-
+            WriteToConsole(solution?.Print());
         }
 
         private Genotype GetRandomGenotype(Graph graph, int n = 100)
@@ -82,7 +83,7 @@ namespace AI_1
             for (int i = 0; i < n; i++)
             {
                 var genotype = randomizer.GetRandomGenotype(graph);
-                if (genotype.GetColorsCount() < bestG.GetColorsCount())
+                if (genotype.GetMaxColor() < bestG.GetMaxColor())
                 {
                     bestG = genotype;
                 }

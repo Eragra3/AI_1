@@ -33,6 +33,21 @@ namespace AI_1.Models
             VerticesIds = new List<int>(200);
         }
 
+        public int GetHighestColor()
+        {
+            int k = 0;
+
+            foreach (var vertex in Vertices)
+            {
+                if (vertex.Color > k)
+                {
+                    k = vertex.Color;
+                }
+            }
+
+            return k;
+        }
+
         public int GetColorsCount()
         {
             IList<int> colors = new List<int>(20);
@@ -54,7 +69,7 @@ namespace AI_1.Models
             result.AppendLine(new string('-', 50));
             result.AppendLine("GRAPH");
             result.AppendLine(string.Format("edges: {0} vertices: {1}", Edges.Count, Vertices.Count));
-            result.AppendLine(string.Format("k: {0}", GetColorsCount()));
+            result.AppendLine(string.Format("colors: {0} k: {1}", GetColorsCount(), GetHighestColor()));
 
             foreach (var edge in Edges)
             {
@@ -79,18 +94,5 @@ namespace AI_1.Models
 
             return IsValid;
         }
-
-        //public bool IsValid(IList<Gene> Genes)
-        //{
-        //    var IsValid = true;
-        //    for (int i = 0; IsValid && i < Edges.Count; i++)
-        //    {
-        //        var edge = Edges[i];
-
-        //        IsValid = edge.IsValid();
-        //    }
-
-        //    return IsValid;
-        //}
     }
 }

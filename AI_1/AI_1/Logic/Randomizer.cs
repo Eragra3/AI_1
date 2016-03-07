@@ -24,15 +24,20 @@ namespace AI_1.Logic
         {
             var genotype = new Genotype(graph.Edges, graph.VerticesIds, graph.MaxVertexID);
 
-            for (int i = 0; !genotype.IsValid() && i < 1000; i++)
+            int colorLimit = 100;
+            while (!genotype.IsValid())
             {
-                RandomizeColors(genotype);
+                for (int i = 0; !genotype.IsValid() && i < 200; i++)
+                {
+                    RandomizeColors(genotype, colorLimit);
+                }
+                colorLimit += 100;
             }
 
             return genotype;
         }
 
-        public void RandomizeColors(Genotype genotype)
+        public void RandomizeColors(Genotype genotype, int colorLimit)
         {
             foreach (var edge in genotype.Edges)
             {
@@ -59,28 +64,18 @@ namespace AI_1.Logic
                 else if (gene1.color == 0)
                 {
                     var newBestColor = GetRandomColor(edge.Weight, gene2.color);
-                    if (edge.IsValidWithColors(gene2.color, newBestColor))
-                    {
-                        gene1.color = newBestColor;
-                    }
-                    else {
-                        newBestColor += Math.Abs(edge.Weight - gene2.color);
-                    }
+
+                    gene1.color = newBestColor;
                 }
                 else if (gene2.color == 0)
                 {
                     var newBestColor = GetRandomColor(edge.Weight, gene1.color);
-                    if (edge.IsValidWithColors(gene1.color, newBestColor))
-                    {
-                        gene2.color = newBestColor;
-                    }
-                    else {
-                        newBestColor += Math.Abs(edge.Weight - gene1.color);
-                    }
+
+                    gene2.color = newBestColor;
                 }
                 else if (!edge.IsValidWithColors(gene1.color, gene2.color))
                 {
-                    var colors = FixColors(edge.Weight, gene1.color, gene2.color);
+                    var colors = FixColors(edge.Weight, gene1.color, gene2.color, colorLimit);
                     if (gene1.color < gene2.color)
                     {
                         gene1.color += colors.Item1;
@@ -98,25 +93,38 @@ namespace AI_1.Logic
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Tuple<int, int> GetRandomColors(int weight)
         {
-            var colorOffset = _random.Next(1, 11);
+            var colorOffset = _random.Next(1, weight);
 
             return new Tuple<int, int>(colorOffset, 1 + weight + (int)(colorOffset * 1.2));
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public int GetRandomColor(int edgeWeight, int nodeColor)
+        public int GetRandomColor(int weight, int nodeColor)
         {
-            var newColor = nodeColor - edgeWeight;
-            if (newColor < 1)
+            int newColor = nodeColor;
+            bool solutionFound = false;
+
+            while (!solutionFound && newColor > 0)
             {
-                newColor = nodeColor + edgeWeight;
+                newColor--;
+
+                solutionFound = CommonMethods.BCPIsValid(weight, newColor, nodeColor);
+            }
+
+            if (!solutionFound) newColor = nodeColor;
+
+            while (!solutionFound)
+            {
+                newColor++;
+
+                solutionFound = CommonMethods.BCPIsValid(weight, newColor, nodeColor);
             }
 
             return newColor;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public Tuple<int, int> FixColors(int weight, int color1, int color2)
+        public Tuple<int, int> FixColors(int weight, int color1, int color2, int maxColor)
         {
             var newLowerColor = Math.Min(color1, color2);
             var newUpperColor = Math.Max(color1, color2);
@@ -131,7 +139,7 @@ namespace AI_1.Logic
 
             if (!solutionFound) newLowerColor = Math.Min(color1, color2);
 
-            while (!solutionFound && newLowerColor > 0)
+            while (!solutionFound && newLowerColor > 0 && newUpperColor < maxColor)
             {
                 newLowerColor--;
 
@@ -144,9 +152,13 @@ namespace AI_1.Logic
                 }
             }
 
-            if (!solutionFound) newLowerColor = Math.Min(color1, color2);
+            if (!solutionFound)
+            {
+                newLowerColor = Math.Min(color1, color2);
+                newUpperColor = Math.Max(color1, color2);
+            }
 
-            while (!solutionFound && newUpperColor < 1000)
+            while (!solutionFound && newUpperColor < maxColor)
             {
                 newUpperColor++;
 
