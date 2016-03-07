@@ -12,26 +12,40 @@ namespace AI_1.Models
 
         public IList<Edge> Edges { get; set; }
 
+        public int VerticesCount
+        {
+            get
+            {
+                return Vertices?.Count ?? 0;
+            }
+        }
+
+        public int MaxVertexID { get; set; }
+
+        public IList<int> VerticesIds { get; set; }
+
         public Graph()
         {
             Vertices = new List<Vertex>(1000);
 
             Edges = new List<Edge>(200);
+
+            VerticesIds = new List<int>(200);
         }
 
-        public int GetMaxColor()
+        public int GetColorsCount()
         {
-            int k = 0;
+            IList<int> colors = new List<int>(20);
 
             foreach (var vertex in Vertices)
             {
-                if (vertex.Color > k)
+                if (!colors.Contains(vertex.Color))
                 {
-                    k = vertex.Color;
+                    colors.Add(vertex.Color);
                 }
             }
 
-            return k;
+            return colors.Count;
         }
 
         public string Print()
@@ -40,7 +54,7 @@ namespace AI_1.Models
             result.AppendLine(new string('-', 50));
             result.AppendLine("GRAPH");
             result.AppendLine(string.Format("edges: {0} vertices: {1}", Edges.Count, Vertices.Count));
-            result.AppendLine(string.Format("k: {0}", GetMaxColor()));
+            result.AppendLine(string.Format("k: {0}", GetColorsCount()));
 
             foreach (var edge in Edges)
             {
@@ -54,5 +68,29 @@ namespace AI_1.Models
 
             return result.ToString();
         }
+
+        public bool IsValid()
+        {
+            var IsValid = true;
+            for (int i = 0; IsValid && i < Edges.Count; i++)
+            {
+                IsValid = Edges[i].IsValid();
+            }
+
+            return IsValid;
+        }
+
+        //public bool IsValid(IList<Gene> Genes)
+        //{
+        //    var IsValid = true;
+        //    for (int i = 0; IsValid && i < Edges.Count; i++)
+        //    {
+        //        var edge = Edges[i];
+
+        //        IsValid = edge.IsValid();
+        //    }
+
+        //    return IsValid;
+        //}
     }
 }

@@ -81,7 +81,7 @@ namespace AI_1.Parser
                     edge.Vertex2 = graph.Vertices[edge.Vertex2ID - 1];
                 }
 
-                //remove disjoined vertices 
+                //remove disjoined vertices
                 for (int i = 0; i < graph.Vertices.Count; i++)
                 {
                     var vertex = graph.Vertices[i];
@@ -102,6 +102,30 @@ namespace AI_1.Parser
                         i--;
                     }
                 }
+
+                //find all unique vertices ids and find biggest id
+                int maxID = 0;
+                foreach (var edge in graph.Edges)
+                {
+                    if (edge.Vertex1ID > maxID)
+                    {
+                        maxID = edge.Vertex1ID;
+                    }
+                    if (edge.Vertex2ID > maxID)
+                    {
+                        maxID = edge.Vertex2ID;
+                    }
+
+                    if (!graph.VerticesIds.Contains(edge.Vertex1ID))
+                    {
+                        graph.VerticesIds.Add(edge.Vertex1ID);
+                    }
+                    if (!graph.VerticesIds.Contains(edge.Vertex2ID))
+                    {
+                        graph.VerticesIds.Add(edge.Vertex2ID);
+                    }
+                }
+                graph.MaxVertexID = maxID;
             }
             catch (FileNotFoundException e)
             {

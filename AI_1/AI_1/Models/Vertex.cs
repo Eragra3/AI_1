@@ -22,10 +22,10 @@ namespace AI_1.Models
 
         public string Print()
         {
-            var weight = Weight.ToString().PadLeft(3, ' ');
+            //var weight = Weight.ToString().PadLeft(3, ' ');
             var color = Color.ToString().PadLeft(3, ' ');
 
-            return string.Format("{0} {1} c:{2}", ABBREVIATION, weight, color);
+            return string.Format("{0} c:{1}", ABBREVIATION, color);
         }
     }
 }

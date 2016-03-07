@@ -17,6 +17,8 @@ namespace AI_1
     {
         private Graph graph;
 
+        private IList<Genotype> genotypes;
+
         public Form1()
         {
             InitializeComponent();
@@ -31,7 +33,7 @@ namespace AI_1
         {
             var parse = new COLReader();
 
-            graph = parse.ParseFile(Configuration.GEOM20);
+            graph = parse.ParseFile(Configuration.GEOM100a);
             //Console.WriteLine(graph.Print());
             WriteToConsole(graph.Print());
         }
@@ -50,11 +52,43 @@ namespace AI_1
         {
             if (graph != null)
             {
-                var randomizer = new Randomizer();
-                randomizer.RandomizeColors(graph);
+                var bestG = GetRandomGenotype(graph);
 
-                WriteToConsole(graph.Print());
+                WriteToConsole(bestG.Print());
             }
+        }
+
+        private void startAlgorithmButton_Click(object sender, EventArgs e)
+        {
+            if (graph != null)
+            {
+                var randomizer = new Randomizer();
+
+                var startingGenotype = randomizer.GetRandomGenotype(graph);
+
+                var gaExecutor = new GAExecutor(startingGenotype);
+
+                genotypes.Add(startingGenotype);
+            }
+
+
+        }
+
+        private Genotype GetRandomGenotype(Graph graph, int n = 100)
+        {
+            var randomizer = new Randomizer();
+
+            Genotype bestG = randomizer.GetRandomGenotype(graph);
+            for (int i = 0; i < n; i++)
+            {
+                var genotype = randomizer.GetRandomGenotype(graph);
+                if (genotype.GetColorsCount() < bestG.GetColorsCount())
+                {
+                    bestG = genotype;
+                }
+            }
+
+            return bestG;
         }
     }
 }

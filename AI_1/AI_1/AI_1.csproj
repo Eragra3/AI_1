@@ -52,14 +52,20 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configuration.cs" />
+    <Compile Include="Extensions\ExtensionMethods.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\CommonMethods.cs" />
+    <Compile Include="Logic\GAExecutor.cs" />
+    <Compile Include="Logic\GAMethods.cs" />
     <Compile Include="Logic\Randomizer.cs" />
     <Compile Include="Models\Edge.cs" />
+    <Compile Include="Models\Gene.cs" />
+    <Compile Include="Models\Genotype.cs" />
     <Compile Include="Models\Graph.cs" />
     <Compile Include="Models\Vertex.cs" />
     <Compile Include="Parser\COLReader.cs" />
