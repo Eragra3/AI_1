@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AI_1.Logic;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,16 +7,22 @@ using System.Threading.Tasks;
 
 namespace AI_1.Models
 {
-    public class Genotype
+    public class Phenotype
     {
+        private static int idCounter = 1;
+
+        public int ID { get; set; }
+
         public IList<Edge> Edges { get; set; }
 
         public Gene[] Genes { get; set; }
 
         public int MaxID { get; set; }
 
-        public Genotype(IList<Edge> edges, IList<int> verticesIds, int maxID)
+        public Phenotype(IList<Edge> edges, IList<int> verticesIds, int maxID)
         {
+            ID = idCounter++;
+
             Edges = edges;
 
             Genes = new Gene[maxID + 1];
@@ -24,6 +31,16 @@ namespace AI_1.Models
             {
                 Genes[id] = new Gene(id);
             }
+
+            MaxID = maxID;
+        }
+        public Phenotype(IList<Edge> edges, int maxID)
+        {
+            ID = idCounter++;
+
+            Edges = edges;
+
+            Genes = new Gene[maxID + 1];
 
             MaxID = maxID;
         }
@@ -98,17 +115,41 @@ namespace AI_1.Models
             return result.ToString();
         }
 
-        public string Dump()
+        public string Dump(int generation = 0)
         {
-            var colors = GetColorsCount().ToString().PadLeft(3, ' ');
-            var k = GetMaxColor().ToString().PadLeft(3, ' ');
+            var colors = GetColorsCount();
+            var k = GetMaxColor();
+            var fitness = GAExecutor.GetFitness(this);
+            var invalidEdges = GetInvalidEdgesCount();
+            var isValid = invalidEdges == 0;
+            var isValidText = isValid ? 1 : 0;
 
-            var isValid = IsValid();
-            var isValidText = isValid ? string.Empty : "INVALID";
-
-            var text = string.Format("colors:{0} k:{1} valid:{2}", colors, k, isValidText);
+            var text = string.Format("{0},{1},{2},{3},{4},{5}",
+                generation,
+                colors,
+                k,
+                isValidText,
+                fitness,
+                invalidEdges);
 
             return text;
+        }
+
+        public int GetInvalidEdgesCount()
+        {
+            var invalidCount = 0;
+            foreach (var edge in Edges)
+            {
+                var color1 = Genes[edge.Vertex1ID].color;
+                var color2 = Genes[edge.Vertex2ID].color;
+
+                if (!edge.IsValidWithColors(color1, color2))
+                {
+                    invalidCount++;
+                }
+            }
+
+            return invalidCount;
         }
     }
 }

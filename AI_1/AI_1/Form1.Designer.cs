@@ -29,6 +29,10 @@
         private void InitializeComponent()
         {
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.mutationMethodCB = new System.Windows.Forms.ComboBox();
+            this.crossoverMethodCB = new System.Windows.Forms.ComboBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
             this.startAlgorithmButton = new System.Windows.Forms.Button();
             this.randomizeButton = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
@@ -46,6 +50,10 @@
             // 
             // splitContainer1.Panel1
             // 
+            this.splitContainer1.Panel1.Controls.Add(this.mutationMethodCB);
+            this.splitContainer1.Panel1.Controls.Add(this.crossoverMethodCB);
+            this.splitContainer1.Panel1.Controls.Add(this.label2);
+            this.splitContainer1.Panel1.Controls.Add(this.label1);
             this.splitContainer1.Panel1.Controls.Add(this.startAlgorithmButton);
             this.splitContainer1.Panel1.Controls.Add(this.randomizeButton);
             this.splitContainer1.Panel1.Controls.Add(this.button1);
@@ -56,6 +64,47 @@
             this.splitContainer1.Size = new System.Drawing.Size(886, 484);
             this.splitContainer1.SplitterDistance = 295;
             this.splitContainer1.TabIndex = 1;
+            // 
+            // mutationMethodCB
+            // 
+            this.mutationMethodCB.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.mutationMethodCB.FormattingEnabled = true;
+            this.mutationMethodCB.Location = new System.Drawing.Point(147, 204);
+            this.mutationMethodCB.Name = "mutationMethodCB";
+            this.mutationMethodCB.Size = new System.Drawing.Size(145, 21);
+            this.mutationMethodCB.TabIndex = 6;
+            this.mutationMethodCB.SelectionChangeCommitted += new System.EventHandler(this.mutationMethodCB_SelectionChangeCommitted);
+            // 
+            // crossoverMethodCB
+            // 
+            this.crossoverMethodCB.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.crossoverMethodCB.FormattingEnabled = true;
+            this.crossoverMethodCB.Location = new System.Drawing.Point(147, 177);
+            this.crossoverMethodCB.Name = "crossoverMethodCB";
+            this.crossoverMethodCB.Size = new System.Drawing.Size(145, 21);
+            this.crossoverMethodCB.TabIndex = 5;
+            this.crossoverMethodCB.SelectionChangeCommitted += new System.EventHandler(this.crossoverMethodCB_SelectionChangeCommitted);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(3, 207);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(87, 13);
+            this.label2.TabIndex = 4;
+            this.label2.Text = "Mutation Method";
+            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(3, 180);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(93, 13);
+            this.label1.TabIndex = 3;
+            this.label1.Text = "Crossover Method";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // startAlgorithmButton
             // 
@@ -112,6 +161,7 @@
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.splitContainer1.Panel1.ResumeLayout(false);
+            this.splitContainer1.Panel1.PerformLayout();
             this.splitContainer1.Panel2.ResumeLayout(false);
             this.splitContainer1.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
@@ -127,6 +177,10 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button randomizeButton;
         private System.Windows.Forms.Button startAlgorithmButton;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label1;
+        public System.Windows.Forms.ComboBox crossoverMethodCB;
+        public System.Windows.Forms.ComboBox mutationMethodCB;
     }
 }
 

@@ -1,4 +1,5 @@
-﻿using AI_1.Logic;
+﻿using AI_1.Enums;
+using AI_1.Logic;
 using AI_1.Models;
 using AI_1.Parser;
 using System;
@@ -17,8 +18,6 @@ namespace AI_1
     {
         private GAExecutor executor;
 
-        private IList<Genotype> genotypes;
-
         public Form1()
         {
             InitializeComponent();
@@ -26,7 +25,8 @@ namespace AI_1
 
         private void Form1_Load(object sender, EventArgs e)
         {
-
+            crossoverMethodCB.DataSource = Enum.GetValues(typeof(CrossoverMethods));
+            mutationMethodCB.DataSource = Enum.GetValues(typeof(MutationMethods));
         }
 
         private void ReadFile(object sender, EventArgs e)
@@ -75,11 +75,11 @@ namespace AI_1
             WriteToConsole(solution?.Print());
         }
 
-        private Genotype GetRandomGenotype(Graph graph, int n = 100)
+        private Phenotype GetRandomGenotype(Graph graph, int n = 100)
         {
             var randomizer = new Randomizer();
 
-            Genotype bestG = randomizer.GetRandomGenotype(graph);
+            Phenotype bestG = randomizer.GetRandomGenotype(graph);
             for (int i = 0; i < n; i++)
             {
                 var genotype = randomizer.GetRandomGenotype(graph);
@@ -90,6 +90,31 @@ namespace AI_1
             }
 
             return bestG;
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void crossoverMethodCB_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            CrossoverMethods newMethod;
+
+            if (Enum.TryParse(crossoverMethodCB.SelectedValue.ToString(), out newMethod))
+            {
+                Configuration.CrossoverMethod = newMethod;
+            }
+        }
+
+        private void mutationMethodCB_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            MutationMethods newMethod;
+
+            if (Enum.TryParse(mutationMethodCB.SelectedValue.ToString(), out newMethod))
+            {
+                Configuration.MutationMethod = newMethod;
+            }
         }
     }
 }

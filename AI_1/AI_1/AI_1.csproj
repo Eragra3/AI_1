@@ -53,6 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configuration.cs" />
+    <Compile Include="Enums\GAMethodsEnums.cs" />
     <Compile Include="Extensions\ExtensionMethods.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>

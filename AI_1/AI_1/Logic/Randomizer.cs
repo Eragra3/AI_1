@@ -20,14 +20,17 @@ namespace AI_1.Logic
             _random = new Random();
         }
 
-        public Genotype GetRandomGenotype(Graph graph)
+        public Phenotype GetRandomGenotype(Graph graph)
         {
-            var genotype = new Genotype(graph.Edges, graph.VerticesIds, graph.MaxVertexID);
+            var genotype = new Phenotype(graph.Edges, graph.VerticesIds, graph.MaxVertexID);
 
-            int colorLimit = 100;
+            int colorLimit = 150;
+
+            InitialRoll(genotype);
+
             while (!genotype.IsValid())
             {
-                for (int i = 0; !genotype.IsValid() && i < 200; i++)
+                for (int i = 0; !genotype.IsValid() && i < 100; i++)
                 {
                     RandomizeColors(genotype, colorLimit);
                 }
@@ -37,10 +40,11 @@ namespace AI_1.Logic
             return genotype;
         }
 
-        public void RandomizeColors(Genotype genotype, int colorLimit)
+        public void InitialRoll(Phenotype genotype)
         {
-            foreach (var edge in genotype.Edges)
+            foreach (int i in Enumerable.Range(0, genotype.Edges.Count).OrderBy(x => _random.Next()))
             {
+                var edge = genotype.Edges[i];
                 var gene1 = genotype.Genes[edge.Vertex1ID];
                 if (gene1 == null)
                 {
@@ -73,18 +77,29 @@ namespace AI_1.Logic
 
                     gene2.color = newBestColor;
                 }
-                else if (!edge.IsValidWithColors(gene1.color, gene2.color))
+            }
+        }
+
+        public void RandomizeColors(Phenotype genotype, int colorLimit)
+        {
+            foreach (int i in Enumerable.Range(0, genotype.Edges.Count).OrderBy(x => _random.Next()))
+            {
+                var edge = genotype.Edges[i];
+                var gene1 = genotype.Genes[edge.Vertex1ID];
+                var gene2 = genotype.Genes[edge.Vertex2ID];
+
+                if (!edge.IsValidWithColors(gene1.color, gene2.color))
                 {
                     var colors = FixColors(edge.Weight, gene1.color, gene2.color, colorLimit);
                     if (gene1.color < gene2.color)
                     {
-                        gene1.color += colors.Item1;
-                        gene2.color += colors.Item2;
+                        gene1.color = colors.Item1;
+                        gene2.color = colors.Item2;
                     }
                     else
                     {
-                        gene2.color += colors.Item1;
-                        gene1.color += colors.Item2;
+                        gene2.color = colors.Item1;
+                        gene1.color = colors.Item2;
                     }
                 }
             }
@@ -93,9 +108,13 @@ namespace AI_1.Logic
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Tuple<int, int> GetRandomColors(int weight)
         {
-            var colorOffset = _random.Next(1, weight);
+            var colorOffset = _random.Next(1, weight * 5);
 
-            return new Tuple<int, int>(colorOffset, 1 + weight + (int)(colorOffset * 1.2));
+            var lowerColor = (int)(colorOffset * (0.5 + _random.NextDouble()));
+
+            var upperColor = (int)(1 + weight + colorOffset * (0.5 + _random.NextDouble()));
+
+            return new Tuple<int, int>(lowerColor, upperColor);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -106,7 +125,7 @@ namespace AI_1.Logic
 
             while (!solutionFound && newColor > 0)
             {
-                newColor--;
+                newColor -= _random.Next(1, 4);
 
                 solutionFound = CommonMethods.BCPIsValid(weight, newColor, nodeColor);
             }
@@ -115,7 +134,7 @@ namespace AI_1.Logic
 
             while (!solutionFound)
             {
-                newColor++;
+                newColor += _random.Next(1, 4);
 
                 solutionFound = CommonMethods.BCPIsValid(weight, newColor, nodeColor);
             }
@@ -130,49 +149,29 @@ namespace AI_1.Logic
             var newUpperColor = Math.Max(color1, color2);
             var solutionFound = false;
 
-            while (!solutionFound && newLowerColor > 0)
+            while (!solutionFound &&
+                newLowerColor > 0 &&
+                newLowerColor < maxColor &&
+                newUpperColor > 0 &&
+                newUpperColor < maxColor)
             {
-                newLowerColor--;
-
-                solutionFound = CommonMethods.BCPIsValid(weight, newLowerColor, newUpperColor);
-            }
-
-            if (!solutionFound) newLowerColor = Math.Min(color1, color2);
-
-            while (!solutionFound && newLowerColor > 0 && newUpperColor < maxColor)
-            {
-                newLowerColor--;
+                newLowerColor += _random.Next(-3, 4);
 
                 solutionFound = CommonMethods.BCPIsValid(weight, newLowerColor, newUpperColor);
                 if (!solutionFound)
                 {
-                    newUpperColor++;
+                    newUpperColor += _random.Next(-3, 4);
 
                     solutionFound = CommonMethods.BCPIsValid(weight, newLowerColor, newUpperColor);
                 }
             }
 
-            if (!solutionFound)
-            {
-                newLowerColor = Math.Min(color1, color2);
-                newUpperColor = Math.Max(color1, color2);
-            }
+            newLowerColor = newLowerColor.Clamp(1, maxColor);
+            newUpperColor = newUpperColor.Clamp(1, maxColor);
 
-            while (!solutionFound && newUpperColor < maxColor)
-            {
-                newUpperColor++;
-
-                solutionFound = CommonMethods.BCPIsValid(weight, newLowerColor, newUpperColor);
-            }
-
-            if (color1 < color2)
-            {
-                return new Tuple<int, int>(newLowerColor, newUpperColor);
-            }
-            else
-            {
-                return new Tuple<int, int>(newUpperColor, newLowerColor);
-            }
+            return new Tuple<int, int>(
+                Math.Min(newLowerColor, newUpperColor),
+                Math.Max(newLowerColor, newUpperColor));
         }
     }
 }
