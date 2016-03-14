@@ -82,26 +82,26 @@ namespace AI_1.Parser
                 }
 
                 //remove disjoined vertices
-                for (int i = 0; i < graph.Vertices.Count; i++)
-                {
-                    var vertex = graph.Vertices[i];
+                //for (int i = 0; i < graph.Vertices.Count; i++)
+                //{
+                //    var vertex = graph.Vertices[i];
 
-                    var disjoined = true;
+                //    var disjoined = true;
 
-                    for (int j = 0; disjoined && j < graph.Edges.Count; j++)
-                    {
-                        if (graph.Edges[j].Vertex1 == vertex || graph.Edges[j].Vertex2 == vertex)
-                        {
-                            disjoined = false;
-                        }
-                    }
-                    if (disjoined)
-                    {
-                        graph.Vertices.RemoveAt(i);
-                        //.NET remove empty spaces in lists, next item is now at current index
-                        i--;
-                    }
-                }
+                //    for (int j = 0; disjoined && j < graph.Edges.Count; j++)
+                //    {
+                //        if (graph.Edges[j].Vertex1 == vertex || graph.Edges[j].Vertex2 == vertex)
+                //        {
+                //            disjoined = false;
+                //        }
+                //    }
+                //    if (disjoined)
+                //    {
+                //        graph.Vertices.RemoveAt(i);
+                //        //.NET remove empty spaces in lists, next item is now at current index
+                //        i--;
+                //    }
+                //}
 
                 //find all unique vertices ids and find biggest id
                 int maxID = 0;

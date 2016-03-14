@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace AI_1.Models
 {
-    public class Phenotype
+    public class Genotype
     {
         private static int idCounter = 1;
 
@@ -19,7 +19,7 @@ namespace AI_1.Models
 
         public int MaxID { get; set; }
 
-        public Phenotype(IList<Edge> edges, IList<int> verticesIds, int maxID)
+        public Genotype(IList<Edge> edges, IList<int> verticesIds, int maxID)
         {
             ID = idCounter++;
 
@@ -34,7 +34,8 @@ namespace AI_1.Models
 
             MaxID = maxID;
         }
-        public Phenotype(IList<Edge> edges, int maxID)
+
+        public Genotype(IList<Edge> edges, int maxID)
         {
             ID = idCounter++;
 

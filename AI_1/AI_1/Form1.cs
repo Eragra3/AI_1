@@ -33,7 +33,7 @@ namespace AI_1
         {
             var parse = new COLReader();
 
-            var graph = parse.ParseFile(Configuration.GEOM100a);
+            var graph = parse.ParseFile(Configuration.GEOM20);
 
             executor = new GAExecutor(graph);
 
@@ -70,16 +70,18 @@ namespace AI_1
 
                 executor = new GAExecutor(graph);
             }
-            var solution = executor.RunHeuristic();
-
-            WriteToConsole(solution?.Print());
+            var solution = executor.RunHeuristic(Configuration.PopulationCount, Configuration.GenerationsCount);
+            if (solution != null)
+            {
+                WriteToConsole(solution.Print());
+            }
         }
 
-        private Phenotype GetRandomGenotype(Graph graph, int n = 100)
+        private Genotype GetRandomGenotype(Graph graph, int n = 100)
         {
             var randomizer = new Randomizer();
 
-            Phenotype bestG = randomizer.GetRandomGenotype(graph);
+            Genotype bestG = randomizer.GetRandomGenotype(graph);
             for (int i = 0; i < n; i++)
             {
                 var genotype = randomizer.GetRandomGenotype(graph);

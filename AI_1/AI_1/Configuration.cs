@@ -22,15 +22,17 @@ namespace AI_1
         public static readonly string GEOM20 = RESOURCES_PATH + "GEOM20.col";
         public static readonly string GEOM100a = RESOURCES_PATH + "GEOM100a.col";
 
-        public static readonly double MUTATION_RATE = 0.02;
-
-        public static readonly double FITNESS_ALPHA = 0.2;
-
-        public static readonly double INVALID_EDGES_WEIGHT = 6;
 
         public static CrossoverMethods CrossoverMethod { get; set; } = CrossoverMethods.POP;
         public static MutationMethods MutationMethod { get; set; } = MutationMethods.RAND_INC;
-        public static int ColorsCount { get; set; }
-        public static int PopulationCount { get; set; }
+
+        public static double MutationRate { get; set; } = 0.03;
+        public static double ImmigrationRate { get; set; } = 0.01;
+        public static double FitnessAlpha { get; set; } = 0.2;
+        public static int ColorsCount { get; set; } = 110;
+        //keep this value even, crossovers produce two childs
+        public static int PopulationCount { get; set; } = 1000;
+        public static int GenerationsCount { get; set; } = 2000;
+        public static int SpecimensInTournament { get; set; } = 2;
     }
 }
