@@ -37,6 +37,7 @@
             this.randomizeButton = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.Console_AI = new System.Windows.Forms.TextBox();
+            this.StartBasicScriptButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -50,6 +51,7 @@
             // 
             // splitContainer1.Panel1
             // 
+            this.splitContainer1.Panel1.Controls.Add(this.StartBasicScriptButton);
             this.splitContainer1.Panel1.Controls.Add(this.mutationMethodCB);
             this.splitContainer1.Panel1.Controls.Add(this.crossoverMethodCB);
             this.splitContainer1.Panel1.Controls.Add(this.label2);
@@ -151,6 +153,16 @@
             this.Console_AI.TabIndex = 0;
             this.Console_AI.TextChanged += new System.EventHandler(this.Console_AI_TextChanged);
             // 
+            // StartBasicScriptButton
+            // 
+            this.StartBasicScriptButton.Location = new System.Drawing.Point(3, 92);
+            this.StartBasicScriptButton.Name = "StartBasicScriptButton";
+            this.StartBasicScriptButton.Size = new System.Drawing.Size(289, 23);
+            this.StartBasicScriptButton.TabIndex = 7;
+            this.StartBasicScriptButton.Text = "Start Basic Script";
+            this.StartBasicScriptButton.UseVisualStyleBackColor = true;
+            this.StartBasicScriptButton.Click += new System.EventHandler(this.StartBasicScriptButton_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -181,6 +193,7 @@
         private System.Windows.Forms.Label label1;
         public System.Windows.Forms.ComboBox crossoverMethodCB;
         public System.Windows.Forms.ComboBox mutationMethodCB;
+        private System.Windows.Forms.Button StartBasicScriptButton;
     }
 }
 

@@ -48,7 +48,7 @@ namespace AI_1.Parser
 
                             weight = int.Parse(lineElements[0]);
 
-                            var vertex = new Vertex { Weight = weight };
+                            var vertex = new Vertex();
                             graph.Vertices.Add(vertex);
                         }
                         else if (elementTag.Equals('e'))

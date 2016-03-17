@@ -116,7 +116,7 @@ namespace AI_1.Models
             return result.ToString();
         }
 
-        public string Dump(int generation = 0)
+        public string Dump()
         {
             var colors = GetColorsCount();
             var k = GetMaxColor();
@@ -125,8 +125,7 @@ namespace AI_1.Models
             var isValid = invalidEdges == 0;
             var isValidText = isValid ? 1 : 0;
 
-            var text = string.Format("{0},{1},{2},{3},{4},{5}",
-                generation,
+            var text = string.Format("{0},{1},{2},{3},{4}",
                 colors,
                 k,
                 isValidText,

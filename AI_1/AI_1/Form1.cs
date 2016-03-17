@@ -6,7 +6,9 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -67,6 +69,7 @@ namespace AI_1
                 var parse = new COLReader();
 
                 var graph = parse.ParseFile(Configuration.GEOM100a);
+                Configuration.SourceFilePath = Configuration.GEOM100a;
 
                 executor = new GAExecutor(graph);
             }
@@ -117,6 +120,43 @@ namespace AI_1
             {
                 Configuration.MutationMethod = newMethod;
             }
+        }
+
+        private void StartBasicScriptButton_Click(object sender, EventArgs e)
+        {
+            var script = new BasicScript();
+
+            var solutions = new List<Genotype>(script.Experiments.Count);
+
+            using (var writer = new StreamWriter(
+                Configuration.RESOURCES_PATH + "solutions_" + DateTime.Now.ToString("yyyy-MM-dd_HH-mm") + ".txt", true)
+                )
+            {
+
+                var experimentNumber = 1;
+                foreach (var experiment in script.Experiments)
+                {
+                    var sw = new Stopwatch();
+
+                    sw.Start();
+
+                    var solution = experiment.Run();
+
+                    var duration = sw.ElapsedMilliseconds;
+
+                    writer.WriteLine("EXPERIMENT {0}", experimentNumber);
+                    writer.WriteLine("duration: {0}ms", duration);
+                    writer.WriteLine(solution?.Dump() ?? string.Empty);
+                    writer.WriteLine(solution?.Print() ?? string.Empty);
+                    writer.WriteLine("@".PadLeft(40, '@'));
+                    writer.WriteLine("@".PadLeft(40, '@'));
+                    writer.WriteLine("@".PadLeft(40, '@'));
+                    writer.Flush();
+
+                    solutions.Add(solution);
+                }
+            }
+
         }
     }
 }
