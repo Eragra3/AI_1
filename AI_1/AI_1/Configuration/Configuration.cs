@@ -50,9 +50,9 @@ namespace AI_1
         public static readonly double MAX_COLOR_WEIGHT = 0.2;
         public static readonly int COLORS_COUNT = 100;
 
-        public static readonly int POPULATION_COUNT = 1000;
-        public static readonly int GENERATIONS_COUNT = 2000;
-        public static readonly int SPECIMENS_IN_TOURNAMENT = 20;
+        public static readonly int POPULATION_COUNT = 300;
+        public static readonly int GENERATIONS_COUNT = 5000;
+        public static readonly int SPECIMENS_IN_TOURNAMENT = 10;
         public static readonly int MAX_STALE_GENERATIONS = 200;
 
         public static void SetDefaults()

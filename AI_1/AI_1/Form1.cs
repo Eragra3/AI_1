@@ -18,7 +18,7 @@ namespace AI_1
 {
     public partial class Form1 : Form
     {
-        private GAExecutor executor;
+        private GAExecutor _executor;
 
         public Form1()
         {
@@ -33,7 +33,7 @@ namespace AI_1
 
         private void startAlgorithmButton_Click(object sender, EventArgs e)
         {
-            if (executor == null)
+            if (_executor == null)
             {
                 var parse = new COLReader();
 
@@ -42,9 +42,9 @@ namespace AI_1
                 var graph = parse.ParseFile(usedFile);
                 Configuration.SourceFilePath = usedFile;
 
-                executor = new GAExecutor(graph);
+                _executor = new GAExecutor(graph);
             }
-            var solution = executor.RunHeuristic(Configuration.PopulationCount, Configuration.GenerationsCount);
+            var solution = _executor.RunHeuristic(Configuration.PopulationCount, Configuration.GenerationsCount);
 
             Console.WriteLine(solution?.Dump() ?? string.Empty);
             Console.WriteLine(solution?.Print() ?? string.Empty);
