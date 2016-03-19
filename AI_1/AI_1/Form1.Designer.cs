@@ -29,6 +29,9 @@
         private void InitializeComponent()
         {
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.button2 = new System.Windows.Forms.Button();
+            this.StartGEOM70ScriptButton = new System.Windows.Forms.Button();
+            this.StartBasicScriptButton = new System.Windows.Forms.Button();
             this.mutationMethodCB = new System.Windows.Forms.ComboBox();
             this.crossoverMethodCB = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
@@ -36,11 +39,8 @@
             this.startAlgorithmButton = new System.Windows.Forms.Button();
             this.randomizeButton = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
-            this.Console_AI = new System.Windows.Forms.TextBox();
-            this.StartBasicScriptButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
-            this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -51,6 +51,8 @@
             // 
             // splitContainer1.Panel1
             // 
+            this.splitContainer1.Panel1.Controls.Add(this.button2);
+            this.splitContainer1.Panel1.Controls.Add(this.StartGEOM70ScriptButton);
             this.splitContainer1.Panel1.Controls.Add(this.StartBasicScriptButton);
             this.splitContainer1.Panel1.Controls.Add(this.mutationMethodCB);
             this.splitContainer1.Panel1.Controls.Add(this.crossoverMethodCB);
@@ -59,19 +61,45 @@
             this.splitContainer1.Panel1.Controls.Add(this.startAlgorithmButton);
             this.splitContainer1.Panel1.Controls.Add(this.randomizeButton);
             this.splitContainer1.Panel1.Controls.Add(this.button1);
-            // 
-            // splitContainer1.Panel2
-            // 
-            this.splitContainer1.Panel2.Controls.Add(this.Console_AI);
             this.splitContainer1.Size = new System.Drawing.Size(886, 484);
             this.splitContainer1.SplitterDistance = 295;
             this.splitContainer1.TabIndex = 1;
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(3, 151);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(289, 23);
+            this.button2.TabIndex = 9;
+            this.button2.Text = "Start GEOM40 Script";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
+            // StartGEOM70ScriptButton
+            // 
+            this.StartGEOM70ScriptButton.Location = new System.Drawing.Point(3, 122);
+            this.StartGEOM70ScriptButton.Name = "StartGEOM70ScriptButton";
+            this.StartGEOM70ScriptButton.Size = new System.Drawing.Size(289, 23);
+            this.StartGEOM70ScriptButton.TabIndex = 8;
+            this.StartGEOM70ScriptButton.Text = "Start GEOM70 Script";
+            this.StartGEOM70ScriptButton.UseVisualStyleBackColor = true;
+            this.StartGEOM70ScriptButton.Click += new System.EventHandler(this.StartGEOM70ScriptButton_Click);
+            // 
+            // StartBasicScriptButton
+            // 
+            this.StartBasicScriptButton.Location = new System.Drawing.Point(3, 92);
+            this.StartBasicScriptButton.Name = "StartBasicScriptButton";
+            this.StartBasicScriptButton.Size = new System.Drawing.Size(289, 23);
+            this.StartBasicScriptButton.TabIndex = 7;
+            this.StartBasicScriptButton.Text = "Start Basic Script";
+            this.StartBasicScriptButton.UseVisualStyleBackColor = true;
+            this.StartBasicScriptButton.Click += new System.EventHandler(this.StartBasicScriptButton_Click);
             // 
             // mutationMethodCB
             // 
             this.mutationMethodCB.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.mutationMethodCB.FormattingEnabled = true;
-            this.mutationMethodCB.Location = new System.Drawing.Point(147, 204);
+            this.mutationMethodCB.Location = new System.Drawing.Point(147, 455);
             this.mutationMethodCB.Name = "mutationMethodCB";
             this.mutationMethodCB.Size = new System.Drawing.Size(145, 21);
             this.mutationMethodCB.TabIndex = 6;
@@ -81,7 +109,7 @@
             // 
             this.crossoverMethodCB.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.crossoverMethodCB.FormattingEnabled = true;
-            this.crossoverMethodCB.Location = new System.Drawing.Point(147, 177);
+            this.crossoverMethodCB.Location = new System.Drawing.Point(147, 428);
             this.crossoverMethodCB.Name = "crossoverMethodCB";
             this.crossoverMethodCB.Size = new System.Drawing.Size(145, 21);
             this.crossoverMethodCB.TabIndex = 5;
@@ -90,7 +118,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(3, 207);
+            this.label2.Location = new System.Drawing.Point(3, 458);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(87, 13);
             this.label2.TabIndex = 4;
@@ -100,13 +128,12 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(3, 180);
+            this.label1.Location = new System.Drawing.Point(3, 431);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(93, 13);
             this.label1.TabIndex = 3;
             this.label1.Text = "Crossover Method";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // startAlgorithmButton
             // 
@@ -126,7 +153,6 @@
             this.randomizeButton.TabIndex = 1;
             this.randomizeButton.Text = "Randomize";
             this.randomizeButton.UseVisualStyleBackColor = true;
-            this.randomizeButton.Click += new System.EventHandler(this.randomizeButton_Click);
             // 
             // button1
             // 
@@ -136,32 +162,6 @@
             this.button1.TabIndex = 0;
             this.button1.Text = "Read File";
             this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.ReadFile);
-            // 
-            // Console_AI
-            // 
-            this.Console_AI.AcceptsReturn = true;
-            this.Console_AI.AcceptsTab = true;
-            this.Console_AI.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.Console_AI.Location = new System.Drawing.Point(3, 3);
-            this.Console_AI.MaxLength = 200000;
-            this.Console_AI.Multiline = true;
-            this.Console_AI.Name = "Console_AI";
-            this.Console_AI.ReadOnly = true;
-            this.Console_AI.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.Console_AI.Size = new System.Drawing.Size(581, 478);
-            this.Console_AI.TabIndex = 0;
-            this.Console_AI.TextChanged += new System.EventHandler(this.Console_AI_TextChanged);
-            // 
-            // StartBasicScriptButton
-            // 
-            this.StartBasicScriptButton.Location = new System.Drawing.Point(3, 92);
-            this.StartBasicScriptButton.Name = "StartBasicScriptButton";
-            this.StartBasicScriptButton.Size = new System.Drawing.Size(289, 23);
-            this.StartBasicScriptButton.TabIndex = 7;
-            this.StartBasicScriptButton.Text = "Start Basic Script";
-            this.StartBasicScriptButton.UseVisualStyleBackColor = true;
-            this.StartBasicScriptButton.Click += new System.EventHandler(this.StartBasicScriptButton_Click);
             // 
             // Form1
             // 
@@ -174,8 +174,6 @@
             this.Load += new System.EventHandler(this.Form1_Load);
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel1.PerformLayout();
-            this.splitContainer1.Panel2.ResumeLayout(false);
-            this.splitContainer1.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -185,7 +183,6 @@
         #endregion
 
         private System.Windows.Forms.SplitContainer splitContainer1;
-        private System.Windows.Forms.TextBox Console_AI;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button randomizeButton;
         private System.Windows.Forms.Button startAlgorithmButton;
@@ -194,6 +191,8 @@
         public System.Windows.Forms.ComboBox crossoverMethodCB;
         public System.Windows.Forms.ComboBox mutationMethodCB;
         private System.Windows.Forms.Button StartBasicScriptButton;
+        private System.Windows.Forms.Button StartGEOM70ScriptButton;
+        private System.Windows.Forms.Button button2;
     }
 }
 

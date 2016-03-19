@@ -7,9 +7,11 @@ using System.Threading.Tasks;
 
 namespace AI_1
 {
-    public class BasicScript
+    public class BasicScript : IScript
     {
         public IList<Experiment> Experiments { get; set; }
+
+        public string SourceFile { get; set; } = "various_files";
 
         public BasicScript()
         {

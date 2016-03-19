@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace AI_1.Models
@@ -13,13 +14,15 @@ namespace AI_1.Models
     {
         private string FilePath { get; set; }
 
+        public int Repetitions { get; set; }
+
         #region CONFIGURATION
         public CrossoverMethods CrossoverMethod { get; set; } = CrossoverMethods.POP;
         public MutationMethods MutationMethod { get; set; } = MutationMethods.RAND_INC;
 
         public double MutationRate { get; set; } = Configuration.MUTATION_RATE;
         public double ImmigrationRate { get; set; } = Configuration.IMMIGRATION_RATE;
-        public double FitnessAlpha { get; set; } = Configuration.FITNESS_ALPHA;
+        public double FitnessAlpha { get; set; } = Configuration.MAX_COLOR_WEIGHT;
 
         public int ColorsCount { get; set; } = Configuration.COLORS_COUNT;
         public int PopulationCount { get; set; } = Configuration.POPULATION_COUNT;
@@ -42,8 +45,14 @@ namespace AI_1.Models
             var graph = parse.ParseFile(FilePath);
 
             var executor = new GAExecutor(graph);
+            var fileName = Regex.Match(FilePath, @"/[A-Za-z0-9.]+$").Value;
+            fileName = fileName.Substring(1, fileName.IndexOf('.') - 1);
+            
 
-            var solution = executor.RunHeuristic(Configuration.PopulationCount, Configuration.GenerationsCount);
+            var solution = executor.RunHeuristic(
+                Configuration.PopulationCount, 
+                Configuration.GenerationsCount,
+                Configuration.GetExperimentLogFilePath(fileName));
 
             return solution;
         }
@@ -55,7 +64,7 @@ namespace AI_1.Models
 
             Configuration.MutationRate = MutationRate;
             Configuration.ImmigrationRate = ImmigrationRate;
-            Configuration.FitnessAlpha = FitnessAlpha;
+            Configuration.MaxColorWeight = FitnessAlpha;
 
             Configuration.ColorsCount = ColorsCount;
             Configuration.PopulationCount = PopulationCount;

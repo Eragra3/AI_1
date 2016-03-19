@@ -10,7 +10,7 @@ namespace AI_1.Models
     {
         public IList<Vertex> Vertices { get; set; }
 
-        public IList<Edge> Edges { get; set; }
+        public Edge[] Edges { get; set; }
 
         public int VerticesCount
         {
@@ -28,7 +28,7 @@ namespace AI_1.Models
         {
             Vertices = new List<Vertex>(1000);
 
-            Edges = new List<Edge>(200);
+            Edges = new Edge[200];
 
             VerticesIds = new List<int>(200);
         }
@@ -68,7 +68,7 @@ namespace AI_1.Models
             StringBuilder result = new StringBuilder();
             result.AppendLine(new string('-', 50));
             result.AppendLine("GRAPH");
-            result.AppendLine(string.Format("edges: {0} vertices: {1}", Edges.Count, Vertices.Count));
+            result.AppendLine(string.Format("edges: {0} vertices: {1}", Edges.Length, Vertices.Count));
             result.AppendLine(string.Format("colors: {0} k: {1}", GetColorsCount(), GetHighestColor()));
 
             foreach (var edge in Edges)
@@ -87,7 +87,7 @@ namespace AI_1.Models
         public bool IsValid()
         {
             var IsValid = true;
-            for (int i = 0; IsValid && i < Edges.Count; i++)
+            for (int i = 0; IsValid && i < Edges.Length; i++)
             {
                 IsValid = Edges[i].IsValid();
             }

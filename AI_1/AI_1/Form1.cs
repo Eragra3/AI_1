@@ -31,75 +31,23 @@ namespace AI_1
             mutationMethodCB.DataSource = Enum.GetValues(typeof(MutationMethods));
         }
 
-        private void ReadFile(object sender, EventArgs e)
-        {
-            var parse = new COLReader();
-
-            var graph = parse.ParseFile(Configuration.GEOM20);
-
-            executor = new GAExecutor(graph);
-
-            WriteToConsole(executor.LoadedGraph.Print());
-        }
-
-        public void WriteToConsole(string text)
-        {
-            Console_AI.AppendText(text);
-        }
-
-        private void Console_AI_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void randomizeButton_Click(object sender, EventArgs e)
-        {
-            if (executor != null)
-            {
-                var bestG = GetRandomGenotype(executor.LoadedGraph);
-
-                WriteToConsole(bestG.Print());
-            }
-        }
-
         private void startAlgorithmButton_Click(object sender, EventArgs e)
         {
             if (executor == null)
             {
                 var parse = new COLReader();
 
-                var graph = parse.ParseFile(Configuration.GEOM100a);
-                Configuration.SourceFilePath = Configuration.GEOM100a;
+
+                var usedFile = Configuration.GEOM40;
+                var graph = parse.ParseFile(usedFile);
+                Configuration.SourceFilePath = usedFile;
 
                 executor = new GAExecutor(graph);
             }
             var solution = executor.RunHeuristic(Configuration.PopulationCount, Configuration.GenerationsCount);
-            if (solution != null)
-            {
-                WriteToConsole(solution.Print());
-            }
-        }
 
-        private Genotype GetRandomGenotype(Graph graph, int n = 100)
-        {
-            var randomizer = new Randomizer();
-
-            Genotype bestG = randomizer.GetRandomGenotype(graph);
-            for (int i = 0; i < n; i++)
-            {
-                var genotype = randomizer.GetRandomGenotype(graph);
-                if (genotype.GetMaxColor() < bestG.GetMaxColor())
-                {
-                    bestG = genotype;
-                }
-            }
-
-            return bestG;
-        }
-
-        private void label1_Click(object sender, EventArgs e)
-        {
-
+            Console.WriteLine(solution?.Dump() ?? string.Empty);
+            Console.WriteLine(solution?.Print() ?? string.Empty);
         }
 
         private void crossoverMethodCB_SelectionChangeCommitted(object sender, EventArgs e)
@@ -126,12 +74,24 @@ namespace AI_1
         {
             var script = new BasicScript();
 
-            var solutions = new List<Genotype>(script.Experiments.Count);
+            RunScript(script);
+        }
+
+        private void StartGEOM70ScriptButton_Click(object sender, EventArgs e)
+        {
+            var script = new GEOM70Script();
+
+            RunScript(script);
+        }
+
+        private void RunScript(IScript script)
+        {
 
             using (var writer = new StreamWriter(
-                Configuration.RESOURCES_PATH + "solutions_" + DateTime.Now.ToString("yyyy-MM-dd_HH-mm") + ".txt", true)
+                Configuration.RESOURCES_PATH + "Solutions/solutions_" + DateTime.Now.ToString("yyyy-MM-dd_HH-mm") + ".txt", true)
                 )
             {
+                var solutions = new List<Genotype>(script.Experiments.Count);
 
                 var experimentNumber = 1;
                 foreach (var experiment in script.Experiments)
@@ -144,7 +104,7 @@ namespace AI_1
 
                     var duration = sw.ElapsedMilliseconds;
 
-                    writer.WriteLine("EXPERIMENT {0}", experimentNumber);
+                    writer.WriteLine("EXPERIMENT {0}", experimentNumber++);
                     writer.WriteLine("duration: {0}ms", duration);
                     writer.WriteLine(solution?.Dump() ?? string.Empty);
                     writer.WriteLine(solution?.Print() ?? string.Empty);
@@ -156,7 +116,13 @@ namespace AI_1
                     solutions.Add(solution);
                 }
             }
+        }
 
+        private void button2_Click(object sender, EventArgs e)
+        {
+            var script = new GEOM40Script();
+
+            RunScript(script);
         }
     }
 }

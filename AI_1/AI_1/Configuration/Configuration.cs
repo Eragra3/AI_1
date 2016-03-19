@@ -10,10 +10,21 @@ namespace AI_1
     public static class Configuration
     {
         public static readonly string RESOURCES_PATH = "C:/School/AI_Resources/";
-        public static string LogFilePath => "C:/School/AI_Resources/Logs/GA_statistics_"
+
+        public static string GetLogFilePath => "C:/School/AI_Resources/Logs/GA_statistics_"
                                               + DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss") + ".txt";
 
+
+        public static string GetExperimentLogFilePath(string fileName)
+        {
+            var directory = "C:/School/AI_Resources/Logs/";
+            return directory + fileName + DateTime.Now.ToString("_yyyy-MM-dd_HH-mm-ss") + ".txt";
+        }
+
+
         public static readonly string GEOM20 = RESOURCES_PATH + "GEOM20.col";
+        public static readonly string GEOM30 = RESOURCES_PATH + "GEOM30.col";
+        public static readonly string GEOM40 = RESOURCES_PATH + "GEOM40.col";
         public static readonly string GEOM70 = RESOURCES_PATH + "GEOM70.col";
         public static readonly string GEOM100a = RESOURCES_PATH + "GEOM100a.col";
         public static readonly string GEOM120 = RESOURCES_PATH + "GEOM120.col";
@@ -22,25 +33,27 @@ namespace AI_1
         public static CrossoverMethods CrossoverMethod { get; set; } = CrossoverMethods.POP;
         public static MutationMethods MutationMethod { get; set; } = MutationMethods.RAND_INC;
 
-        public static double MutationRate { get; set; } = 0.04;
+        public static double MutationRate { get; set; } = 0.03;
+        public static double CrossoverRate { get; set; } = 0.95;
         public static double ImmigrationRate { get; set; } = 0.01;
-        public static double FitnessAlpha { get; set; } = 0.4;
-        public static int ColorsCount { get; set; } = 100;
+        public static double MaxColorWeight { get; set; } = 0.2;
+        public static int ColorsCount { get; set; } = 33;
         //keep this value even, crossovers produce two childs
-        public static int PopulationCount { get; set; } = 1000;
-        public static int GenerationsCount { get; set; } = 2000;
-        public static int SpecimensInTournament { get; set; } = 2;
+        public static int PopulationCount { get; set; } = 300;
+        public static int GenerationsCount { get; set; } = 5000;
+        public static int SpecimensInTournament { get; set; } = 4;
 
         public static string SourceFilePath { get; set; }
 
         public static readonly double MUTATION_RATE = 0.03;
         public static readonly double IMMIGRATION_RATE = 0.01;
-        public static readonly double FITNESS_ALPHA = 0.01;
+        public static readonly double MAX_COLOR_WEIGHT = 0.2;
         public static readonly int COLORS_COUNT = 100;
 
         public static readonly int POPULATION_COUNT = 1000;
         public static readonly int GENERATIONS_COUNT = 2000;
-        public static readonly int SPECIMENS_IN_TOURNAMENT = 2;
+        public static readonly int SPECIMENS_IN_TOURNAMENT = 20;
+        public static readonly int MAX_STALE_GENERATIONS = 200;
 
         public static void SetDefaults()
         {
@@ -49,7 +62,7 @@ namespace AI_1
 
             MutationRate = MUTATION_RATE;
             ImmigrationRate = IMMIGRATION_RATE;
-            FitnessAlpha = FITNESS_ALPHA;
+            MaxColorWeight = MAX_COLOR_WEIGHT;
             ColorsCount = COLORS_COUNT;
             PopulationCount = POPULATION_COUNT;
             GenerationsCount = GENERATIONS_COUNT;
@@ -67,7 +80,7 @@ namespace AI_1
             sb.AppendLine();
 
             sb.Append(
-                $"{MutationRate};{ImmigrationRate};{FitnessAlpha};{ColorsCount};{PopulationCount};{GenerationsCount};{SpecimensInTournament};{CrossoverMethod.ToString()};{MutationMethod.ToString()};{SourceFilePath};{LogFilePath}");
+                $"{MutationRate};{ImmigrationRate};{MaxColorWeight};{ColorsCount};{PopulationCount};{GenerationsCount};{SpecimensInTournament};{CrossoverMethod.ToString()};{MutationMethod.ToString()};{SourceFilePath};{GetLogFilePath}");
 
             return sb.ToString();
         }

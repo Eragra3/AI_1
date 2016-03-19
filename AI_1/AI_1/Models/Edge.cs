@@ -9,15 +9,15 @@ namespace AI_1.Models
 {
     public class Edge
     {
-        public int Vertex1ID { get; set; }
+        public int Vertex1ID;
 
-        public Vertex Vertex1 { get; set; }
+        public Vertex Vertex1;
 
-        public int Vertex2ID { get; set; }
+        public int Vertex2ID;
 
-        public Vertex Vertex2 { get; set; }
+        public Vertex Vertex2;
 
-        public int Weight { get; set; }
+        public int Weight;
 
         public const char ABBREVIATION = 'e';
 

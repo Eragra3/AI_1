@@ -18,6 +18,7 @@ namespace AI_1.Parser
             try
             {
                 string line;
+                var edges = new List<Edge>(200);
                 using (var reader = new StreamReader(path))
                 {
                     while (!reader.EndOfStream)
@@ -71,10 +72,11 @@ namespace AI_1.Parser
                                 Weight = weight
                             };
 
-                            graph.Edges.Add(edge);
+                            edges.Add(edge);
                         }
                     }
                 }
+                graph.Edges = edges.ToArray();
                 foreach (var edge in graph.Edges)
                 {
                     edge.Vertex1 = graph.Vertices[edge.Vertex1ID - 1];

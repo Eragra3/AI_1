@@ -32,7 +32,7 @@ namespace AI_1.Logic
 
         public void InitialRoll(Genotype genotype)
         {
-            foreach (int i in Enumerable.Range(0, genotype.Edges.Count).OrderBy(x => _random.Next()))
+            foreach (int i in Enumerable.Range(0, genotype.Edges.Length).OrderBy(x => _random.Next()))
             {
                 var edge = genotype.Edges[i];
                 var gene1 = genotype.Genes[edge.Vertex1ID];

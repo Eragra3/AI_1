@@ -13,13 +13,15 @@ namespace AI_1.Models
 
         public int ID { get; set; }
 
-        public IList<Edge> Edges { get; set; }
+        public Edge[] Edges { get; set; }
 
         public Gene[] Genes { get; set; }
 
         public int MaxID { get; set; }
 
-        public Genotype(IList<Edge> edges, IList<int> verticesIds, int maxID)
+        public bool IsWild  { get; set; }
+
+        public Genotype(Edge[] edges, IList<int> verticesIds, int maxID)
         {
             ID = idCounter++;
 
@@ -35,7 +37,7 @@ namespace AI_1.Models
             MaxID = maxID;
         }
 
-        public Genotype(IList<Edge> edges, int maxID)
+        public Genotype(Edge[] edges, int maxID)
         {
             ID = idCounter++;
 
@@ -49,7 +51,7 @@ namespace AI_1.Models
         public bool IsValid()
         {
             var isValid = true;
-            for (int i = 0; isValid && i < Edges.Count; i++)
+            for (int i = 0; isValid && i < Edges.Length; i++)
             {
                 var edge = Edges[i];
 
@@ -109,7 +111,7 @@ namespace AI_1.Models
                 }
             }
 
-            result.AppendLine(string.Format("edges: {0} vertices: {1}", Edges.Count, Genes.Count()));
+            result.AppendLine(string.Format("edges: {0} vertices: {1}", Edges.Length, Genes.Count()));
             result.AppendLine(string.Format("colors: {0} k: {1}", GetColorsCount(), GetMaxColor()));
             result.AppendLine(new string('-', 50));
 
