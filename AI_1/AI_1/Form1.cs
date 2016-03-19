@@ -116,6 +116,8 @@ namespace AI_1
                     solutions.Add(solution);
                 }
             }
+
+            Console.WriteLine("Finished script");
         }
 
         private void button2_Click(object sender, EventArgs e)

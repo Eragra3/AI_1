@@ -54,8 +54,6 @@ namespace AI_1.Logic
                     {
                         bestSolution = specimen;
                     }
-
-                    Console.WriteLine("randomized: {0}", i);
                 }
 
                 DumpMessage(Configuration.DumpCurrentSettings());
@@ -69,8 +67,6 @@ namespace AI_1.Logic
                 //weStillBelieve < 100
                 for (var i = 0; i < generationsCount && (bestSolution == null || weStillBelieve < -1); i++)
                 {
-                    Console.WriteLine("Run: {0}", i);
-
                     for (int j = 0; j < populationCount / 2; j++)
                     {
                         var parent1 = StartTournament();
