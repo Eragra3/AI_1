@@ -96,24 +96,27 @@ namespace AI_1
                 var experimentNumber = 1;
                 foreach (var experiment in script.Experiments)
                 {
-                    var sw = new Stopwatch();
+                    for (int i = 0; i < experiment.Repetitions; i++)
+                    {
+                        var sw = new Stopwatch();
 
-                    sw.Start();
+                        sw.Start();
 
-                    var solution = experiment.Run();
+                        var solution = experiment.Run();
 
-                    var duration = sw.ElapsedMilliseconds;
+                        var duration = sw.ElapsedMilliseconds;
 
-                    writer.WriteLine("EXPERIMENT {0}", experimentNumber++);
-                    writer.WriteLine("duration: {0}ms", duration);
-                    writer.WriteLine(solution?.Dump() ?? string.Empty);
-                    writer.WriteLine(solution?.Print() ?? string.Empty);
-                    writer.WriteLine("@".PadLeft(40, '@'));
-                    writer.WriteLine("@".PadLeft(40, '@'));
-                    writer.WriteLine("@".PadLeft(40, '@'));
-                    writer.Flush();
+                        writer.WriteLine("EXPERIMENT {0} REPETITION {1}", experimentNumber++, i);
+                        writer.WriteLine("duration: {0}ms", duration);
+                        writer.WriteLine(solution?.Dump() ?? string.Empty);
+                        writer.WriteLine(solution?.Print() ?? string.Empty);
+                        writer.WriteLine("@".PadLeft(40, '@'));
+                        writer.WriteLine("@".PadLeft(40, '@'));
+                        writer.WriteLine("@".PadLeft(40, '@'));
+                        writer.Flush();
 
-                    solutions.Add(solution);
+                        solutions.Add(solution);
+                    }
                 }
             }
 
