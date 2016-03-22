@@ -15,10 +15,10 @@ namespace AI_1
                                               + DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss") + ".txt";
 
 
-        public static string GetExperimentLogFilePath(string fileName)
+        public static string GetExperimentLogFilePath(string fileName, string description = "")
         {
             var directory = "C:/School/AI_Resources/Logs/";
-            return directory + fileName + DateTime.Now.ToString("_yyyy-MM-dd_HH-mm-ss") + ".txt";
+            return directory + fileName + "/" +  description + "/" + DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss") + ".txt";
         }
 
 
@@ -47,9 +47,10 @@ namespace AI_1
 
         public static readonly double MUTATION_RATE = 0.03;
         public static readonly double IMMIGRATION_RATE = 0.01;
+        public static readonly double CROSSOVER_RATE = 0.95;
         public static readonly double MAX_COLOR_WEIGHT = 0.2;
-        public static readonly int COLORS_COUNT = 100;
-
+        public static readonly int COLORS_COUNT = 33;
+        
         public static readonly int POPULATION_COUNT = 300;
         public static readonly int GENERATIONS_COUNT = 5000;
         public static readonly int SPECIMENS_IN_TOURNAMENT = 10;
@@ -73,14 +74,34 @@ namespace AI_1
         {
             var sb = new StringBuilder();
 
-            sb.Append("mutation_rate;immigration_rate;fitness_alpha;" +
+            sb.Append("mutation_rate;crossover_rate;immigration_rate;fitness_alpha;" +
                       "max_color;populaton;generations;specimens_in_tournament;" +
                       "crossover_method;mutation_method;file_name;log_name");
 
             sb.AppendLine();
 
             sb.Append(
-                $"{MutationRate};{ImmigrationRate};{MaxColorWeight};{ColorsCount};{PopulationCount};{GenerationsCount};{SpecimensInTournament};{CrossoverMethod.ToString()};{MutationMethod.ToString()};{SourceFilePath};{GetLogFilePath}");
+                $"{MutationRate};{CrossoverRate};{ImmigrationRate};{MaxColorWeight};{ColorsCount};{PopulationCount};{GenerationsCount};{SpecimensInTournament};{CrossoverMethod.ToString()};{MutationMethod.ToString()};{SourceFilePath};{GetLogFilePath}");
+
+            return sb.ToString();
+        }
+
+        public static string DumpCurrentHeuristicSettings()
+        {
+            var sb = new StringBuilder();
+
+            sb.Append(
+                $"{MutationRate};{CrossoverRate};{ImmigrationRate};{MaxColorWeight};{ColorsCount};{PopulationCount};{GenerationsCount};{SpecimensInTournament};{CrossoverMethod.ToString()};{MutationMethod.ToString()}");
+
+            return sb.ToString();
+        }
+        public static string DumpHeuristicSettingsHeader()
+        {
+            var sb = new StringBuilder();
+
+            sb.Append("solution_generation;mutation_rate;crossover_rate;immigration_rate;fitness_alpha;" +
+                      "max_color;populaton;generations;specimens_in_tournament;" +
+                      "crossover_method;mutation_method");
 
             return sb.ToString();
         }

@@ -1,4 +1,5 @@
 ﻿using AI_1.Enums;
+using AI_1.Helpers;
 using AI_1.Logic;
 using AI_1.Models;
 using AI_1.Parser;
@@ -109,7 +110,7 @@ namespace AI_1
                         writer.WriteLine("EXPERIMENT {0} REPETITION {1}", experimentNumber++, i);
                         writer.WriteLine("duration: {0}ms", duration);
                         writer.WriteLine(solution?.Dump() ?? string.Empty);
-                        writer.WriteLine(solution?.Print() ?? string.Empty);
+                        //writer.WriteLine(solution?.Print() ?? string.Empty);
                         writer.WriteLine("@".PadLeft(40, '@'));
                         writer.WriteLine("@".PadLeft(40, '@'));
                         writer.WriteLine("@".PadLeft(40, '@'));
@@ -125,8 +126,30 @@ namespace AI_1
 
         private void button2_Click(object sender, EventArgs e)
         {
-            var script = new GEOM40Script();
 
+            //StaticWriter.Description = "Crossover.txt";
+            //StaticWriter.Log(Configuration.DumpHeuristicSettingsHeader());
+            //var script = new GEOM40Script(ScriptType.CrossoverRate);
+            //RunScript(script);
+
+            //StaticWriter.Description = "Alpha.txt";
+            //StaticWriter.Log(Configuration.DumpHeuristicSettingsHeader());
+            //script = new GEOM40Script(ScriptType.Alpha);
+            //RunScript(script);
+
+            //StaticWriter.Description = "Immigration.txt";
+            //StaticWriter.Log(Configuration.DumpHeuristicSettingsHeader());
+            //script = new GEOM40Script(ScriptType.ImmigrationRate);
+            //RunScript(script);
+
+            StaticWriter.Description = "Tournament.txt";
+            StaticWriter.Log(Configuration.DumpHeuristicSettingsHeader());
+            var script = new GEOM40Script(ScriptType.TournamentSize);
+            RunScript(script);
+
+            StaticWriter.Description = "Mutations_fixed.txt";
+            StaticWriter.Log(Configuration.DumpHeuristicSettingsHeader());
+             script = new GEOM40Script(ScriptType.MutationRate);
             RunScript(script);
         }
     }

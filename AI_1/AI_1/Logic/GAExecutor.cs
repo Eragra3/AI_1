@@ -1,4 +1,5 @@
 ﻿using AI_1.Enums;
+using AI_1.Helpers;
 using AI_1.Models;
 using System;
 using System.Collections.Generic;
@@ -6,6 +7,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace AI_1.Logic
@@ -34,8 +36,11 @@ namespace AI_1.Logic
 
             Genotype bestSolution = null;
 
-            logFilePath  = logFilePath ?? Configuration.GetLogFilePath;
+            logFilePath = logFilePath ?? Configuration.GetLogFilePath;
 
+            var lastSlash = logFilePath.LastIndexOf('/');
+
+            Directory.CreateDirectory(logFilePath.Substring(0, lastSlash));
 
             using (writer = new StreamWriter(logFilePath, true))
             {
@@ -65,12 +70,17 @@ namespace AI_1.Logic
                 var weStillBelieve = 0;
                 Genotype newBestSolution = null;
                 //weStillBelieve < 100
-                for (var i = 0; i < generationsCount && (bestSolution == null || weStillBelieve < -1); i++)
+                var generationIndex = 0;
+                for (generationIndex = 0; generationIndex < generationsCount && (bestSolution == null || weStillBelieve < -1); generationIndex++)
                 {
                     for (int j = 0; j < populationCount / 2; j++)
                     {
                         var parent1 = StartTournament();
-                        var parent2 = StartTournament();
+                        Genotype parent2 = null;
+                        while (parent2 == null || parent1 == parent2)
+                        {
+                            parent2 = StartTournament();
+                        }
 
                         Genotype child1 = null;
                         Genotype child2 = null;
@@ -130,7 +140,7 @@ namespace AI_1.Logic
                         }
                     }
 
-                    var avgChildrenFitness = DumpGenerationStatistics(Population, i, newBestSolution);
+                    var avgChildrenFitness = DumpGenerationStatistics(Population, generationIndex, newBestSolution);
 
                     flushCounter++;
                     if (flushCounter == 10)
@@ -153,12 +163,12 @@ namespace AI_1.Logic
                         avgFitness = avgChildrenFitness;
                         staleGenerations = 0;
                     }
-                    if (staleGenerations == Configuration.MAX_STALE_GENERATIONS)
-                    {
-                        Console.WriteLine("Stopped because of stale generations");
-                        //stop algorithm
-                        goto end_loop;
-                    }
+                    //if (staleGenerations == Configuration.MAX_STALE_GENERATIONS)
+                    //{
+                    //    Console.WriteLine("Stopped because of stale generations");
+                    //    //stop algorithm
+                    //    goto end_loop;
+                    //}
 
                     //if we have solution wait 100 generations
                     //if nothing happens, stop
@@ -197,9 +207,13 @@ namespace AI_1.Logic
                     //#endregion
                 }
 
-            end_loop:
+                end_loop:
 
-                DumpGenerationStatistics(Population, generationsCount, bestSolution);
+                DumpGenerationStatistics(Population, generationIndex, bestSolution);
+
+                StaticWriter.Log(generationIndex + ";" + Configuration.DumpCurrentHeuristicSettings());
+
+                writer.Flush();
             }
 
             return bestSolution;

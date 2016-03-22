@@ -46,7 +46,7 @@ namespace AI_1.Models
 
         public bool IsValidWithColors(int color1, int color2)
         {
-            return color1 > 0 && color2 > 0 && Math.Abs(color1 - color2) >= Weight;
+            return Math.Abs(color1 - color2) >= Weight && color1 > 0 && color2 > 0;
         }
 
         public bool IsValid()

@@ -13,4 +13,12 @@ namespace AI_1
 
         string SourceFile { get; set; }
     }
+    public enum ScriptType
+    {
+        MutationRate,
+        CrossoverRate,
+        TournamentSize,
+        Alpha,
+        ImmigrationRate
+    }
 }

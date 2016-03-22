@@ -25,7 +25,12 @@ namespace AI_1.Logic
             if (specimen == null) return double.NegativeInfinity;
 
             #region non-zero fitness
-            var maxColor = specimen.GetMaxColor();
+            var maxColor = 0;
+
+            if (Configuration.MaxColorWeight != 0)
+            {
+                maxColor = specimen.GetMaxColor();
+            }
 
             var penalty = GetPenalty(specimen);
 
@@ -38,14 +43,16 @@ namespace AI_1.Logic
             #endregion
         }
 
-        //[MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static double GetPenalty(Genotype specimen)
         {
             double penalty = 0;
+            int color1;
+            int color2;
             foreach (var edge in specimen.Edges)
             {
-                var color1 = specimen.Genes[edge.Vertex1ID].color;
-                var color2 = specimen.Genes[edge.Vertex2ID].color;
+                color1 = specimen.Genes[edge.Vertex1ID].color;
+                color2 = specimen.Genes[edge.Vertex2ID].color;
 
                 if (!edge.IsValidWithColors(color1, color2))
                 {
@@ -151,6 +158,10 @@ namespace AI_1.Logic
                 else if (colorIncr < 90)
                 {
                     colorIncr = 3;
+                }
+                else
+                {
+                    colorIncr = 4;
                 }
 
                 if (_random.Next(0, 2) > 0)

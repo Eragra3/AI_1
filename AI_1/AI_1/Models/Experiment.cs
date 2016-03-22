@@ -22,6 +22,7 @@ namespace AI_1.Models
 
         public double MutationRate { get; set; } = Configuration.MUTATION_RATE;
         public double ImmigrationRate { get; set; } = Configuration.IMMIGRATION_RATE;
+        public double CrossoverRate { get; set; } = Configuration.CROSSOVER_RATE;
         public double FitnessAlpha { get; set; } = Configuration.MAX_COLOR_WEIGHT;
 
         public int ColorsCount { get; set; } = Configuration.COLORS_COUNT;
@@ -52,7 +53,7 @@ namespace AI_1.Models
             var solution = executor.RunHeuristic(
                 Configuration.PopulationCount, 
                 Configuration.GenerationsCount,
-                Configuration.GetExperimentLogFilePath(fileName));
+                Configuration.GetExperimentLogFilePath(fileName, "GEOM40_corrected"));
 
             return solution;
         }
@@ -65,6 +66,7 @@ namespace AI_1.Models
             Configuration.MutationRate = MutationRate;
             Configuration.ImmigrationRate = ImmigrationRate;
             Configuration.MaxColorWeight = FitnessAlpha;
+            Configuration.CrossoverRate = CrossoverRate;
 
             Configuration.ColorsCount = ColorsCount;
             Configuration.PopulationCount = PopulationCount;
