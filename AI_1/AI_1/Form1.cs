@@ -34,17 +34,15 @@ namespace AI_1
 
         private void startAlgorithmButton_Click(object sender, EventArgs e)
         {
-            if (_executor == null)
-            {
-                var parse = new COLReader();
+            var parse = new COLReader();
 
 
-                var usedFile = Configuration.GEOM40;
-                var graph = parse.ParseFile(usedFile);
-                Configuration.SourceFilePath = usedFile;
+            var usedFile = Configuration.GEOM40;
+            var graph = parse.ParseFile(usedFile);
+            Configuration.SourceFilePath = usedFile;
 
-                _executor = new GAExecutor(graph);
-            }
+            _executor = new GAExecutor(graph);
+
             var solution = _executor.RunHeuristic(Configuration.PopulationCount, Configuration.GenerationsCount);
 
             Console.WriteLine(solution?.Dump() ?? string.Empty);
@@ -126,10 +124,16 @@ namespace AI_1
 
         private void button2_Click(object sender, EventArgs e)
         {
+            IScript script;
+
+            StaticWriter.Description = "Mutation.txt";
+            StaticWriter.Log(Configuration.DumpHeuristicSettingsHeader());
+            script = new GEOM40Script(ScriptType.MutationRate);
+            RunScript(script);
 
             //StaticWriter.Description = "Crossover.txt";
             //StaticWriter.Log(Configuration.DumpHeuristicSettingsHeader());
-            //var script = new GEOM40Script(ScriptType.CrossoverRate);
+            //script = new GEOM40Script(ScriptType.CrossoverRate);
             //RunScript(script);
 
             //StaticWriter.Description = "Alpha.txt";
@@ -142,15 +146,49 @@ namespace AI_1
             //script = new GEOM40Script(ScriptType.ImmigrationRate);
             //RunScript(script);
 
-            StaticWriter.Description = "Tournament.txt";
-            StaticWriter.Log(Configuration.DumpHeuristicSettingsHeader());
-            var script = new GEOM40Script(ScriptType.TournamentSize);
-            RunScript(script);
+            //StaticWriter.Description = "Tournament.txt";
+            //StaticWriter.Log(Configuration.DumpHeuristicSettingsHeader());
+            //script = new GEOM40Script(ScriptType.TournamentSize);
+            //RunScript(script);
+
+            //StaticWriter.Description = "ColorsCount.txt";
+            //StaticWriter.Log(Configuration.DumpHeuristicSettingsHeader());
+            //script = new GEOM40Script(ScriptType.ColorsCount);
+            //RunScript(script);
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+
+            //StaticWriter.Description = "Crossover.txt";
+            //StaticWriter.Log(Configuration.DumpHeuristicSettingsHeader());
+            //var script = new GEOM20Script(ScriptType.CrossoverRate);
+            //RunScript(script);
+
+            //StaticWriter.Description = "Alpha.txt";
+            //StaticWriter.Log(Configuration.DumpHeuristicSettingsHeader());
+            //script = new GEOM20Script(ScriptType.Alpha);
+            //RunScript(script);
+
+            //StaticWriter.Description = "Immigration.txt";
+            //StaticWriter.Log(Configuration.DumpHeuristicSettingsHeader());
+            //script = new GEOM20Script(ScriptType.ImmigrationRate);
+            //RunScript(script);
+
+            //StaticWriter.Description = "Tournament.txt";
+            //StaticWriter.Log(Configuration.DumpHeuristicSettingsHeader());
+            //var script = new GEOM20Script(ScriptType.TournamentSize);
+            //RunScript(script);
 
             StaticWriter.Description = "Mutations_fixed.txt";
             StaticWriter.Log(Configuration.DumpHeuristicSettingsHeader());
-             script = new GEOM40Script(ScriptType.MutationRate);
+            var script = new GEOM20Script(ScriptType.ColorsCount);
             RunScript(script);
+
+            //StaticWriter.Description = "colors_count.txt";
+            //StaticWriter.Log(Configuration.DumpHeuristicSettingsHeader());
+            //var script = new GEOM20Script(ScriptType.ColorsCount);
+            //RunScript(script);
         }
     }
 }

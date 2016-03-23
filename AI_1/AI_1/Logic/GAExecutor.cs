@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using AI_1.Extensions;
 
 namespace AI_1.Logic
 {
@@ -20,12 +21,12 @@ namespace AI_1.Logic
 
         public Graph LoadedGraph { get; set; }
 
-        private StreamWriter writer;
+        private StreamWriter _writer;
 
         public GAExecutor(Graph graph)
         {
-            Population = new List<Genotype>(300);
-            NextPopulation = new List<Genotype>(300);
+            Population = new List<Genotype>(Configuration.PopulationCount);
+            NextPopulation = new List<Genotype>(Configuration.PopulationCount);
 
             LoadedGraph = graph;
         }
@@ -42,7 +43,7 @@ namespace AI_1.Logic
 
             Directory.CreateDirectory(logFilePath.Substring(0, lastSlash));
 
-            using (writer = new StreamWriter(logFilePath, true))
+            using (_writer = new StreamWriter(logFilePath, true))
             {
                 //Process.Start(logFilePath);
 
@@ -65,26 +66,27 @@ namespace AI_1.Logic
                 DumpGenerationHeader();
                 var flushCounter = 0;
 
-                var staleGenerations = 0;
-                var avgFitness = double.NegativeInfinity;
-                var weStillBelieve = 0;
                 Genotype newBestSolution = null;
-                //weStillBelieve < 100
                 var generationIndex = 0;
-                for (generationIndex = 0; generationIndex < generationsCount && (bestSolution == null || weStillBelieve < -1); generationIndex++)
+
+                Genotype child1, child2, parent1, parent2;
+                for (generationIndex = 0; generationIndex < generationsCount; generationIndex++)
                 {
                     for (int j = 0; j < populationCount / 2; j++)
                     {
-                        var parent1 = StartTournament();
-                        Genotype parent2 = null;
+
+                        parent1 = StartTournament();
+                        parent2 = null;
                         while (parent2 == null || parent1 == parent2)
                         {
                             parent2 = StartTournament();
                         }
 
-                        Genotype child1 = null;
-                        Genotype child2 = null;
+                        child1 = null;
+                        child2 = null;
 
+
+                        #region crossover
                         if (_random.NextDouble() < Configuration.CrossoverRate)
                         {
                             Tuple<Genotype, Genotype> children;
@@ -107,16 +109,23 @@ namespace AI_1.Logic
                             child1 = CloneSpecimen(parent1);
                             child2 = CloneSpecimen(parent2);
                         }
+                        #endregion 
 
+
+                        #region mutation
                         switch (Configuration.MutationMethod)
                         {
                             case MutationMethods.RAND_INC:
+                                MutateRandomIncrement(child1);
                                 MutateRandomIncrement(child2);
                                 break;
                             default:
                                 throw new ArgumentOutOfRangeException();
                         }
+                        #endregion
 
+
+                        #region immigration
                         if (child1.IsWild = _random.NextDouble() < Configuration.ImmigrationRate)
                         {
                             randomizer.InitialRoll(child1);
@@ -125,9 +134,49 @@ namespace AI_1.Logic
                         {
                             randomizer.InitialRoll(child2);
                         }
+                        #endregion  
 
+
+                        #region check same speciman is already in population
+                        int mutationsLeft = 5;
+                        while (NextPopulation.ContainsSpecimen(child1) && mutationsLeft > 0)
+                        {
+                            switch (Configuration.MutationMethod)
+                            {
+                                case MutationMethods.RAND_INC:
+                                    MutateRandomIncrement(child1);
+                                    break;
+                                default:
+                                    throw new ArgumentOutOfRangeException();
+                            }
+                            mutationsLeft--;
+                        }
+                        if (mutationsLeft < 5 && NextPopulation.ContainsSpecimen(child1))
+                        {
+                            randomizer.InitialRoll(child1);
+                        }
                         NextPopulation.Add(child1);
+
+                        mutationsLeft = 5;
+                        while (NextPopulation.ContainsSpecimen(child2) && mutationsLeft > 0)
+                        {
+                            switch (Configuration.MutationMethod)
+                            {
+                                case MutationMethods.RAND_INC:
+                                    MutateRandomIncrement(child2);
+                                    break;
+                                default:
+                                    throw new ArgumentOutOfRangeException();
+                            }
+                            mutationsLeft--;
+                        }
+                        if (mutationsLeft < 5 && NextPopulation.ContainsSpecimen(child2))
+                        {
+                            randomizer.InitialRoll(child2);
+                        }
                         NextPopulation.Add(child2);
+                        #endregion
+
 
                         if (child2.IsValid() && child2.GetMaxColor() < (newBestSolution?.GetMaxColor() ?? int.MaxValue))
                         {
@@ -138,82 +187,32 @@ namespace AI_1.Logic
                         {
                             newBestSolution = child1;
                         }
-                    }
 
-                    var avgChildrenFitness = DumpGenerationStatistics(Population, generationIndex, newBestSolution);
+                    }
 
                     flushCounter++;
                     if (flushCounter == 10)
                     {
                         flushCounter = 0;
-                        writer.Flush();
+                        _writer.Flush();
                     }
+
+                    DumpGenerationStatistics(Population, generationIndex, bestSolution);
 
                     var temp = Population;
                     Population = NextPopulation;
                     NextPopulation = temp;
                     NextPopulation.Clear();
 
-                    if (avgFitness.Equals(avgChildrenFitness))
-                    {
-                        staleGenerations++;
-                    }
-                    else
-                    {
-                        avgFitness = avgChildrenFitness;
-                        staleGenerations = 0;
-                    }
-                    //if (staleGenerations == Configuration.MAX_STALE_GENERATIONS)
-                    //{
-                    //    Console.WriteLine("Stopped because of stale generations");
-                    //    //stop algorithm
-                    //    goto end_loop;
-                    //}
-
-                    //if we have solution wait 100 generations
-                    //if nothing happens, stop
-                    if (bestSolution != null)
-                    {
-                        if (bestSolution == newBestSolution)
-                        {
-                            weStillBelieve++;
-                        }
-                        else
-                        {
-                            weStillBelieve = 0;
-                        }
-                    }
                     bestSolution = newBestSolution;
 
-                    //var currentBestSpecimenFitness = GetFitness(GetBestSpecimen(Population));
-                    //if (Math.Abs(currentBestSpecimenFitness - bestFitness) < Configuration.MaxColorWeight * 2)
-                    //{
-                    //    staleGenerations++;
-                    //}
-                    //#region kickstart, sudden death
-                    //if (staleGenerations == 99)
-                    //{
-                    //    staleGenerations = 0;
-                    //    for (int n = 0; n < Population.Count; n += 2)
-                    //    {
-                    //        var newSpecimen = new Genotype(
-                    //            LoadedGraph.Edges,
-                    //            LoadedGraph.VerticesIds,
-                    //            Population[n].MaxID);
-                    //        randomizer.InitialRoll(newSpecimen);
-                    //        Population[n] = newSpecimen;
-                    //    }
-                    //}
-                    //#endregion
                 }
-
-                end_loop:
 
                 DumpGenerationStatistics(Population, generationIndex, bestSolution);
 
-                StaticWriter.Log(generationIndex + ";" + Configuration.DumpCurrentHeuristicSettings());
+                StaticWriter.Log((bestSolution?.GetMaxColor() ?? -1) + ";" + Configuration.DumpCurrentHeuristicSettings());
 
-                writer.Flush();
+                _writer.Flush();
             }
 
             return bestSolution;
@@ -222,11 +221,13 @@ namespace AI_1.Logic
         private void DumpGenerationHeader()
         {
             var header = "generation;best;worst;average;best_solution";
-            writer.WriteLine(header);
+            _writer.WriteLine(header);
         }
 
-        private double DumpGenerationStatistics(IList<Genotype> population,
-            int generation, Genotype bestSolution)
+        private double DumpGenerationStatistics(
+            IList<Genotype> population,
+            int generation, 
+            Genotype bestSolution)
         {
             Genotype bestSpecimen = null;
             Genotype worstSpecimen = null;
@@ -262,14 +263,14 @@ namespace AI_1.Logic
 
             avgSpecimenFitness /= domesticPopulation;
 
-            writer.WriteLine("{0};{1};{2};{3};{4}", generation, GetFitness(bestSpecimen), GetFitness(worstSpecimen), avgSpecimenFitness, bestSolution?.GetMaxColor() ?? -1);
+            _writer.WriteLine("{0};{1};{2};{3};{4}", generation, GetFitness(bestSpecimen), GetFitness(worstSpecimen), avgSpecimenFitness, bestSolution?.GetMaxColor() ?? -1);
 
             return avgSpecimenFitness;
         }
 
         private void DumpMessage(string msg)
         {
-            writer.WriteLine(msg);
+            _writer.WriteLine(msg);
         }
     }
 }

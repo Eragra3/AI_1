@@ -9,6 +9,11 @@ namespace AI_1
 {
     public static class Configuration
     {
+        static Configuration()
+        {
+            SetDefaults();
+        }
+
         public static readonly string RESOURCES_PATH = "C:/School/AI_Resources/";
 
         public static string GetLogFilePath => "C:/School/AI_Resources/Logs/GA_statistics_"
@@ -33,28 +38,27 @@ namespace AI_1
         public static CrossoverMethods CrossoverMethod { get; set; } = CrossoverMethods.POP;
         public static MutationMethods MutationMethod { get; set; } = MutationMethods.RAND_INC;
 
-        public static double MutationRate { get; set; } = 0.03;
-        public static double CrossoverRate { get; set; } = 0.95;
-        public static double ImmigrationRate { get; set; } = 0.01;
-        public static double MaxColorWeight { get; set; } = 0.2;
-        public static int ColorsCount { get; set; } = 33;
+        public static double MutationRate { get; set; } 
+        public static double CrossoverRate { get; set; } 
+        public static double ImmigrationRate { get; set; }
+        public static double MaxColorWeight { get; set; } 
+        public static int ColorsCount { get; set; } 
         //keep this value even, crossovers produce two childs
-        public static int PopulationCount { get; set; } = 300;
-        public static int GenerationsCount { get; set; } = 5000;
-        public static int SpecimensInTournament { get; set; } = 4;
+        public static int PopulationCount { get; set; } 
+        public static int GenerationsCount { get; set; }
+        public static int SpecimensInTournament { get; set; }
 
         public static string SourceFilePath { get; set; }
 
-        public static readonly double MUTATION_RATE = 0.03;
-        public static readonly double IMMIGRATION_RATE = 0.01;
+        public static readonly double MUTATION_RATE = 0.1;
+        public static readonly double IMMIGRATION_RATE = 0.00;
         public static readonly double CROSSOVER_RATE = 0.95;
         public static readonly double MAX_COLOR_WEIGHT = 0.2;
-        public static readonly int COLORS_COUNT = 33;
+        public static readonly int COLORS_COUNT = 45;
         
         public static readonly int POPULATION_COUNT = 300;
-        public static readonly int GENERATIONS_COUNT = 5000;
+        public static readonly int GENERATIONS_COUNT = 1000;
         public static readonly int SPECIMENS_IN_TOURNAMENT = 10;
-        public static readonly int MAX_STALE_GENERATIONS = 200;
 
         public static void SetDefaults()
         {
@@ -99,7 +103,7 @@ namespace AI_1
         {
             var sb = new StringBuilder();
 
-            sb.Append("solution_generation;mutation_rate;crossover_rate;immigration_rate;fitness_alpha;" +
+            sb.Append("best_solution;mutation_rate;crossover_rate;immigration_rate;fitness_alpha;" +
                       "max_color;populaton;generations;specimens_in_tournament;" +
                       "crossover_method;mutation_method");
 

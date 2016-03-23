@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AI_1.Models;
 
 namespace AI_1.Extensions
 {
@@ -28,6 +29,17 @@ namespace AI_1.Extensions
                 list[k] = list[n];
                 list[n] = value;
             }
+        }
+
+        public static bool ContainsSpecimen(this IList<Genotype> population, Genotype specimen)
+        {
+            bool exists = false;
+            for (int i = 0; !exists && i < population.Count; i++)
+            {
+                exists = population[i].IsClone(specimen);
+            }
+
+            return exists;
         }
     }
 }

@@ -53,7 +53,7 @@ namespace AI_1.Models
             var solution = executor.RunHeuristic(
                 Configuration.PopulationCount, 
                 Configuration.GenerationsCount,
-                Configuration.GetExperimentLogFilePath(fileName, "GEOM40_corrected"));
+                Configuration.GetExperimentLogFilePath(fileName, "GEOM_40_23-03_konkurs"));
 
             return solution;
         }

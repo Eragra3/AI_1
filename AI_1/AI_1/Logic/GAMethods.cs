@@ -19,12 +19,10 @@ namespace AI_1.Logic
             return "generation,colors,k,valid,fitness,invalidEdges";
         }
 
-        //[MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static double GetFitness(Genotype specimen)
         {
             if (specimen == null) return double.NegativeInfinity;
 
-            #region non-zero fitness
             var maxColor = 0;
 
             if (Configuration.MaxColorWeight != 0)
@@ -35,22 +33,18 @@ namespace AI_1.Logic
             var penalty = GetPenalty(specimen);
 
             return Configuration.MaxColorWeight * -maxColor - (1 - Configuration.MaxColorWeight) * penalty;
-            #endregion
-
-            #region only penalty
-            //var penalty = GetPenalty(specimen);
-            //return GetPenalty(specimen);
-            #endregion
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static double GetPenalty(Genotype specimen)
         {
             double penalty = 0;
             int color1;
             int color2;
-            foreach (var edge in specimen.Edges)
+            Edge edge;
+            var edges = specimen.Edges;
+            for (int i = 0; i < specimen.Edges.Length; i++)
             {
+                edge = edges[i];
                 color1 = specimen.Genes[edge.Vertex1ID].color;
                 color2 = specimen.Genes[edge.Vertex2ID].color;
 
@@ -180,6 +174,8 @@ namespace AI_1.Logic
         {
 
             Genotype bestSpecimen = null;
+            var bestSpecimenFitness = double.NegativeInfinity;
+
 
             Genotype specimen = null;
             for (int i = 0; i < Configuration.SpecimensInTournament; i++)
@@ -188,9 +184,10 @@ namespace AI_1.Logic
                 {
                     specimen = Population[_random.Next(0, Population.Count)];
                 }
-                if (bestSpecimen == null || GetFitness(specimen) > GetFitness(bestSpecimen))
+                if (bestSpecimen == null || GetFitness(specimen) > bestSpecimenFitness)
                 {
                     bestSpecimen = specimen;
+                    bestSpecimenFitness = GetFitness(bestSpecimen);
                 }
 
                 specimen = null;

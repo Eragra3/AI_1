@@ -19,6 +19,8 @@ namespace AI_1
         CrossoverRate,
         TournamentSize,
         Alpha,
-        ImmigrationRate
+        ImmigrationRate,
+        ColorsCount,
+        PopulationSize
     }
 }

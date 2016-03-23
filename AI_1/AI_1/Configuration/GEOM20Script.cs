@@ -7,16 +7,16 @@ using AI_1.Models;
 
 namespace AI_1
 {
-    public class GEOM40Script : IScript
+    public class GEOM20Script : IScript
     {
         public IList<Experiment> Experiments { get; set; }
 
-        public string SourceFile { get; set; } = Configuration.GEOM40;
+        public string SourceFile { get; set; } = Configuration.GEOM20;
 
         //MIN 28
-        public GEOM40Script(ScriptType type)
+        public GEOM20Script(ScriptType type)
         {
-            var colorsCount = 45;
+            var colorsCount = 21;
             var repetitions = 10;
             var population = 300;
 
@@ -24,7 +24,6 @@ namespace AI_1
             {
                 case ScriptType.MutationRate:
                     #region mutation
-                    /*
                     Experiments = new List<Experiment>
             {
                 new Experiment(SourceFile)
@@ -112,82 +111,6 @@ namespace AI_1
                     MutationRate = 0.1
                 }
             };
-                    */
-                    #endregion
-                    #region mutation
-                    Experiments = new List<Experiment>
-            {
-                new Experiment(SourceFile)
-                {
-                    PopulationCount = population,
-                    ColorsCount = colorsCount,
-                    Repetitions = repetitions,
-                    MutationRate = 0.05
-                },
-                new Experiment(SourceFile)
-                {
-                    PopulationCount = population,
-                    ColorsCount = colorsCount,
-                    Repetitions = repetitions,
-                    MutationRate = 0.1
-                },
-                new Experiment(SourceFile)
-                {
-                    PopulationCount = population,
-                    ColorsCount = colorsCount,
-                    Repetitions = repetitions,
-                    MutationRate = 0.15
-                },
-                new Experiment(SourceFile)
-                {
-                    PopulationCount = population,
-                    ColorsCount = colorsCount,
-                    Repetitions = repetitions,
-                    MutationRate = 0.2
-                },
-                new Experiment(SourceFile)
-                {
-                    PopulationCount = population,
-                    ColorsCount = colorsCount,
-                    Repetitions = repetitions,
-                    MutationRate = 0.25
-                },
-                new Experiment(SourceFile)
-                {
-                    PopulationCount = population,
-                    ColorsCount = colorsCount,
-                    Repetitions = repetitions,
-                    MutationRate = 0.30
-                },
-                new Experiment(SourceFile)
-                {
-                    PopulationCount = population,
-                    ColorsCount = colorsCount,
-                    Repetitions = repetitions,
-                    MutationRate = 0.35
-                },
-                new Experiment(SourceFile)
-                {
-                    PopulationCount = population,
-                    ColorsCount = colorsCount,
-                    Repetitions = repetitions,
-                    MutationRate = 0.40
-                },
-                new Experiment(SourceFile)
-                {
-                    PopulationCount = population,
-                    ColorsCount = colorsCount,
-                    Repetitions = repetitions,
-                    MutationRate = 0.45
-                },
-                new Experiment(SourceFile)
-                {
-                    PopulationCount = population,
-                    ColorsCount = colorsCount,
-                    Repetitions = repetitions,
-                    MutationRate = 0.5
-                }
-            };
                     #endregion
                     break;
                 case ScriptType.CrossoverRate:
@@ -263,12 +186,32 @@ namespace AI_1
                     Repetitions = repetitions,
                     SpecimensInTournament = 2
                 },
+                //new Experiment(SourceFile)
+                //{
+                //    ColorsCount = colorsCount,
+                //    Repetitions = repetitions,
+                //    MutationRate = 0.0075
+                //},
+                new Experiment(SourceFile)
+                {
+                    PopulationCount = population,
+                    ColorsCount = colorsCount,
+                    Repetitions = repetitions,
+                    SpecimensInTournament = 3
+                },
                 new Experiment(SourceFile)
                 {
                     PopulationCount = population,
                     ColorsCount = colorsCount,
                     Repetitions = repetitions,
                     SpecimensInTournament = 4
+                },
+                new Experiment(SourceFile)
+                {
+                    PopulationCount = population,
+                    ColorsCount = colorsCount,
+                    Repetitions = repetitions,
+                    SpecimensInTournament = 5
                 },
                 new Experiment(SourceFile)
                 {
@@ -282,7 +225,21 @@ namespace AI_1
                     PopulationCount = population,
                     ColorsCount = colorsCount,
                     Repetitions = repetitions,
+                    SpecimensInTournament = 7
+                },
+                new Experiment(SourceFile)
+                {
+                    PopulationCount = population,
+                    ColorsCount = colorsCount,
+                    Repetitions = repetitions,
                     SpecimensInTournament = 8
+                },
+                new Experiment(SourceFile)
+                {
+                    PopulationCount = population,
+                    ColorsCount = colorsCount,
+                    Repetitions = repetitions,
+                    SpecimensInTournament = 9
                 },
                 new Experiment(SourceFile)
                 {
@@ -296,35 +253,7 @@ namespace AI_1
                     PopulationCount = population,
                     ColorsCount = colorsCount,
                     Repetitions = repetitions,
-                    SpecimensInTournament = 12
-                },
-                new Experiment(SourceFile)
-                {
-                    PopulationCount = population,
-                    ColorsCount = colorsCount,
-                    Repetitions = repetitions,
-                    SpecimensInTournament = 14
-                },
-                new Experiment(SourceFile)
-                {
-                    PopulationCount = population,
-                    ColorsCount = colorsCount,
-                    Repetitions = repetitions,
-                    SpecimensInTournament = 16
-                },
-                new Experiment(SourceFile)
-                {
-                    PopulationCount = population,
-                    ColorsCount = colorsCount,
-                    Repetitions = repetitions,
-                    SpecimensInTournament = 18
-                },
-                new Experiment(SourceFile)
-                {
-                    PopulationCount = population,
-                    ColorsCount = colorsCount,
-                    Repetitions = repetitions,
-                    SpecimensInTournament = 20
+                    SpecimensInTournament = 15
                 }
             };
                     #endregion
@@ -345,7 +274,21 @@ namespace AI_1
                     PopulationCount = population,
                     ColorsCount = colorsCount,
                     Repetitions = repetitions,
+                    FitnessAlpha = 0.05
+                },
+                new Experiment(SourceFile)
+                {
+                    PopulationCount = population,
+                    ColorsCount = colorsCount,
+                    Repetitions = repetitions,
                     FitnessAlpha = 0.1
+                },
+                new Experiment(SourceFile)
+                {
+                    PopulationCount = population,
+                    ColorsCount = colorsCount,
+                    Repetitions = repetitions,
+                    FitnessAlpha = 0.15
                 },
                 new Experiment(SourceFile)
                 {
@@ -359,7 +302,28 @@ namespace AI_1
                     PopulationCount = population,
                     ColorsCount = colorsCount,
                     Repetitions = repetitions,
+                    FitnessAlpha = 0.25
+                },
+                new Experiment(SourceFile)
+                {
+                    PopulationCount = population,
+                    ColorsCount = colorsCount,
+                    Repetitions = repetitions,
                     FitnessAlpha = 0.3
+                },
+                new Experiment(SourceFile)
+                {
+                    PopulationCount = population,
+                    ColorsCount = colorsCount,
+                    Repetitions = repetitions,
+                    FitnessAlpha = 0.3
+                },
+                new Experiment(SourceFile)
+                {
+                    PopulationCount = population,
+                    ColorsCount = colorsCount,
+                    Repetitions = repetitions,
+                    FitnessAlpha = 0.35
                 },
                 new Experiment(SourceFile)
                 {
@@ -373,42 +337,14 @@ namespace AI_1
                     PopulationCount = population,
                     ColorsCount = colorsCount,
                     Repetitions = repetitions,
+                    FitnessAlpha = 0.45
+                },
+                new Experiment(SourceFile)
+                {
+                    PopulationCount = population,
+                    ColorsCount = colorsCount,
+                    Repetitions = repetitions,
                     FitnessAlpha = 0.5
-                },
-                new Experiment(SourceFile)
-                {
-                    PopulationCount = population,
-                    ColorsCount = colorsCount,
-                    Repetitions = repetitions,
-                    FitnessAlpha = 0.6
-                },
-                new Experiment(SourceFile)
-                {
-                    PopulationCount = population,
-                    ColorsCount = colorsCount,
-                    Repetitions = repetitions,
-                    FitnessAlpha = 0.7
-                },
-                new Experiment(SourceFile)
-                {
-                    PopulationCount = population,
-                    ColorsCount = colorsCount,
-                    Repetitions = repetitions,
-                    FitnessAlpha = 0.8
-                },
-                new Experiment(SourceFile)
-                {
-                    PopulationCount = population,
-                    ColorsCount = colorsCount,
-                    Repetitions = repetitions,
-                    FitnessAlpha = 0.9
-                },
-                new Experiment(SourceFile)
-                {
-                    PopulationCount = population,
-                    ColorsCount = colorsCount,
-                    Repetitions = repetitions,
-                    FitnessAlpha = 1
                 }
             };
                     #endregion
@@ -465,34 +401,6 @@ namespace AI_1
                     ColorsCount = colorsCount,
                     Repetitions = repetitions,
                     ImmigrationRate = 0.03
-                },
-                new Experiment(SourceFile)
-                {
-                    PopulationCount = population,
-                    ColorsCount = colorsCount,
-                    Repetitions = repetitions,
-                    ImmigrationRate = 0.035
-                },
-                new Experiment(SourceFile)
-                {
-                    PopulationCount = population,
-                    ColorsCount = colorsCount,
-                    Repetitions = repetitions,
-                    ImmigrationRate = 0.04
-                },
-                new Experiment(SourceFile)
-                {
-                    PopulationCount = population,
-                    ColorsCount = colorsCount,
-                    Repetitions = repetitions,
-                    ImmigrationRate = 0.045
-                },
-                new Experiment(SourceFile)
-                {
-                    PopulationCount = population,
-                    ColorsCount = colorsCount,
-                    Repetitions = repetitions,
-                    ImmigrationRate = 0.05
                 }
             };
                     #endregion
@@ -502,86 +410,20 @@ namespace AI_1
 
                     Experiments = new List<Experiment>
                     {
+                        //new Experiment(SourceFile)
+                        //{
+                        //    PopulationCount = population,
+                        //    ColorsCount = 30,
+                        //    Repetitions = repetitions
+                        //},
                         new Experiment(SourceFile)
                         {
                             PopulationCount = population,
-                            ColorsCount = 50,
-                            Repetitions = repetitions
-                        },
-                        new Experiment(SourceFile)
-                        {
-                            PopulationCount = population,
-                            ColorsCount = 45,
-                            Repetitions = repetitions
-                        },
-                        new Experiment(SourceFile)
-                        {
-                            PopulationCount = population,
-                            ColorsCount = 40,
-                            Repetitions = repetitions
-                        },
-                        new Experiment(SourceFile)
-                        {
-                            PopulationCount = population,
-                            ColorsCount = 35,
-                            Repetitions = repetitions
-                        },
-                        new Experiment(SourceFile)
-                        {
-                            PopulationCount = population,
-                            ColorsCount = 34,
-                            Repetitions = repetitions
-                        },
-                        new Experiment(SourceFile)
-                        {
-                            PopulationCount = population,
-                            ColorsCount = 33,
-                            Repetitions = repetitions
-                        },
-                        new Experiment(SourceFile)
-                        {
-                            PopulationCount = population,
-                            ColorsCount = 32,
-                            Repetitions = repetitions
-                        },
-                        new Experiment(SourceFile)
-                        {
-                            PopulationCount = population,
-                            ColorsCount = 31,
-                            Repetitions = repetitions
-                        },
-                        new Experiment(SourceFile)
-                        {
-                            PopulationCount = population,
-                            ColorsCount = 30,
-                            Repetitions = repetitions
-                        },
-                        new Experiment(SourceFile)
-                        {
-                            PopulationCount = population,
-                            ColorsCount = 29,
-                            Repetitions = repetitions
-                        },
-                        new Experiment(SourceFile)
-                        {
-                            PopulationCount = population,
-                            ColorsCount = 28,
+                            ColorsCount = 25,
                             Repetitions = repetitions
                         }
                     };
                     #endregion
-                    break;
-                    case ScriptType.PopulationSize:
-
-                    Experiments = new List<Experiment>
-                    {
-                        new Experiment(SourceFile)
-                        {
-                            PopulationCount = 100,
-                            ColorsCount = colorsCount,
-                            Repetitions = repetitions
-                        }
-                    };
                     break;
                 default:
                     break;

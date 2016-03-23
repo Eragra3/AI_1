@@ -11,7 +11,7 @@ namespace AI_1.Helpers
     {
         private static string _logPath = Configuration.RESOURCES_PATH + "Logs/";
 
-        public static string Description = string.Empty;
+        public static string Description = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss") + ".txt";
 
         public static void Log(string msg)
         {

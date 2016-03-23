@@ -19,7 +19,7 @@ namespace AI_1.Models
 
         public int MaxID { get; set; }
 
-        public bool IsWild  { get; set; }
+        public bool IsWild { get; set; }
 
         public Genotype(Edge[] edges, IList<int> verticesIds, int maxID)
         {
@@ -152,6 +152,22 @@ namespace AI_1.Models
             }
 
             return invalidCount;
+        }
+
+        public bool IsClone(Genotype specimen)
+        {
+            bool isDifferent = false;
+
+            var specimenGenotype = specimen.Genes;
+            for (int i = 0; !isDifferent && i < Genes.Length; i++)
+            {
+                if (specimenGenotype[i] != null)
+                {
+                    isDifferent = specimenGenotype[i].color != Genes[i].color;
+                }
+            }
+
+            return !isDifferent;
         }
     }
 }
