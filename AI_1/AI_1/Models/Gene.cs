@@ -12,6 +12,8 @@ namespace AI_1.Models
 
         public int color;
 
+        public Edge[] edges; 
+
         public Gene(int id)
         {
             this.id = id;

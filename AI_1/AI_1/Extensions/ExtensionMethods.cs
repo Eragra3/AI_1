@@ -31,15 +31,38 @@ namespace AI_1.Extensions
             }
         }
 
+        /// <summary>
+        /// This method is thread safe
+        /// </summary>
+        /// <param name="population"></param>
+        /// <param name="specimen"></param>
+        /// <returns></returns>
+
+        private static readonly object lockObject = new Object();
         public static bool ContainsSpecimen(this IList<Genotype> population, Genotype specimen)
         {
-            bool exists = false;
-            for (int i = 0; !exists && i < population.Count; i++)
+            lock (lockObject)
             {
-                exists = population[i].IsClone(specimen);
-            }
+                bool exists = false;
+                for (int i = 0; !exists && i < population.Count; i++)
+                {
+                    exists = population[i].Id != specimen.Id || population[i].IsClone(specimen);
+                }
 
-            return exists;
+                return exists;
+            }
+        }
+        /// <summary>
+        /// Thread safe addition
+        /// </summary>
+        /// <param name="population"></param>
+        /// <param name="specimen"></param>
+        public static void AddParallel(this IList<Genotype> population, Genotype specimen)
+        {
+            lock (lockObject)
+            {
+                population.Add(specimen);
+            }
         }
     }
 }

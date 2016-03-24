@@ -13,6 +13,8 @@ namespace AI_1.Enums
     }
     public enum MutationMethods
     {
-        RAND_INC = 1
+        RAND_INC,
+        NORMAL,
+        RANDOM
     }
 }

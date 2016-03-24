@@ -34,19 +34,27 @@ namespace AI_1
 
         private void startAlgorithmButton_Click(object sender, EventArgs e)
         {
-            var parse = new COLReader();
+            splitContainer1.Panel2.BackColor = Color.Yellow;
+            var task = Task.Run(() =>
+            {
+                var parse = new COLReader();
 
 
-            var usedFile = Configuration.GEOM40;
-            var graph = parse.ParseFile(usedFile);
-            Configuration.SourceFilePath = usedFile;
+                var usedFile = Configuration.GEOM40;
+                var graph = parse.ParseFile(usedFile);
+                Configuration.SourceFilePath = usedFile;
 
-            _executor = new GAExecutor(graph);
+                _executor = new GAExecutor(graph);
 
-            var solution = _executor.RunHeuristic(Configuration.PopulationCount, Configuration.GenerationsCount);
+                var solution = _executor.RunHeuristic(Configuration.PopulationCount, Configuration.GenerationsCount, openLogFile: true);
 
-            Console.WriteLine(solution?.Dump() ?? string.Empty);
-            Console.WriteLine(solution?.Print() ?? string.Empty);
+                Console.WriteLine(solution?.Dump() ?? string.Empty);
+                Console.WriteLine(solution?.Print() ?? string.Empty);
+            });
+            task.ContinueWith((t) =>
+            {
+                splitContainer1.Panel2.BackColor = Color.White;
+            });
         }
 
         private void crossoverMethodCB_SelectionChangeCommitted(object sender, EventArgs e)
@@ -122,73 +130,163 @@ namespace AI_1
             Console.WriteLine("Finished script");
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void startGEOM40_Click(object sender, EventArgs e)
         {
-            IScript script;
+            splitContainer1.Panel2.BackColor = Color.Yellow;
+            var task = Task.Run(() =>
+            {
+                IScript script;
 
-            StaticWriter.Description = "Mutation.txt";
-            StaticWriter.Log(Configuration.DumpHeuristicSettingsHeader());
-            script = new GEOM40Script(ScriptType.MutationRate);
-            RunScript(script);
+                //StaticWriter.Description = "Mutation.txt";
+                //StaticWriter.Log(Configuration.DumpHeuristicSettingsHeader());
+                //script = new GEOM40Script(ScriptType.MutationRate);
+                //RunScript(script);
 
-            //StaticWriter.Description = "Crossover.txt";
-            //StaticWriter.Log(Configuration.DumpHeuristicSettingsHeader());
-            //script = new GEOM40Script(ScriptType.CrossoverRate);
-            //RunScript(script);
+                //StaticWriter.Description = "Mutation_Wide.txt";
+                //StaticWriter.Log(Configuration.DumpHeuristicSettingsHeader());
+                //script = new GEOM40Script(ScriptType.MutationRateWide);
+                //RunScript(script);
 
-            //StaticWriter.Description = "Alpha.txt";
-            //StaticWriter.Log(Configuration.DumpHeuristicSettingsHeader());
-            //script = new GEOM40Script(ScriptType.Alpha);
-            //RunScript(script);
+                //StaticWriter.Description = "Crossover.txt";
+                //StaticWriter.Log(Configuration.DumpHeuristicSettingsHeader());
+                //script = new GEOM40Script(ScriptType.CrossoverRate);
+                //RunScript(script);
 
-            //StaticWriter.Description = "Immigration.txt";
-            //StaticWriter.Log(Configuration.DumpHeuristicSettingsHeader());
-            //script = new GEOM40Script(ScriptType.ImmigrationRate);
-            //RunScript(script);
+                //StaticWriter.Description = "Alpha.txt";
+                //StaticWriter.Log(Configuration.DumpHeuristicSettingsHeader());
+                //script = new GEOM40Script(ScriptType.Alpha);
+                //RunScript(script);
 
-            //StaticWriter.Description = "Tournament.txt";
-            //StaticWriter.Log(Configuration.DumpHeuristicSettingsHeader());
-            //script = new GEOM40Script(ScriptType.TournamentSize);
-            //RunScript(script);
+                //StaticWriter.Description = "Alpha_Wide.txt";
+                //StaticWriter.Log(Configuration.DumpHeuristicSettingsHeader());
+                //script = new GEOM40Script(ScriptType.AlphaWide);
+                //RunScript(script);
 
-            //StaticWriter.Description = "ColorsCount.txt";
-            //StaticWriter.Log(Configuration.DumpHeuristicSettingsHeader());
-            //script = new GEOM40Script(ScriptType.ColorsCount);
-            //RunScript(script);
+                //StaticWriter.Description = "Immigration.txt";
+                //StaticWriter.Log(Configuration.DumpHeuristicSettingsHeader());
+                //script = new GEOM40Script(ScriptType.ImmigrationRate);
+                //RunScript(script);
+
+                StaticWriter.Description = "Tournament.txt";
+                StaticWriter.Log(Configuration.DumpHeuristicSettingsHeader());
+                script = new GEOM40Script(ScriptType.TournamentSize);
+                RunScript(script);
+
+                //StaticWriter.Description = "ColorsCount.txt";
+                //StaticWriter.Log(Configuration.DumpHeuristicSettingsHeader());
+                //script = new GEOM40Script(ScriptType.ColorsCount);
+                //RunScript(script);
+
+                //StaticWriter.Description = "Population.txt";
+                //StaticWriter.Log(Configuration.DumpHeuristicSettingsHeader());
+                //script = new GEOM40Script(ScriptType.PopulationSize);
+                RunScript(script);
+            });
+            task.ContinueWith((t) =>
+            {
+                splitContainer1.Panel2.BackColor = Color.White;
+            });
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
+            splitContainer1.Panel2.BackColor = Color.Yellow;
+            var task = Task.Run(() =>
+            {
+                //StaticWriter.Description = "Crossover.txt";
+                //StaticWriter.Log(Configuration.DumpHeuristicSettingsHeader());
+                //var script = new GEOM20Script(ScriptType.CrossoverRate);
+                //RunScript(script);
 
-            //StaticWriter.Description = "Crossover.txt";
-            //StaticWriter.Log(Configuration.DumpHeuristicSettingsHeader());
-            //var script = new GEOM20Script(ScriptType.CrossoverRate);
-            //RunScript(script);
+                //StaticWriter.Description = "Alpha.txt";
+                //StaticWriter.Log(Configuration.DumpHeuristicSettingsHeader());
+                //script = new GEOM20Script(ScriptType.Alpha);
+                //RunScript(script);
 
-            //StaticWriter.Description = "Alpha.txt";
-            //StaticWriter.Log(Configuration.DumpHeuristicSettingsHeader());
-            //script = new GEOM20Script(ScriptType.Alpha);
-            //RunScript(script);
+                //StaticWriter.Description = "Immigration.txt";
+                //StaticWriter.Log(Configuration.DumpHeuristicSettingsHeader());
+                //script = new GEOM20Script(ScriptType.ImmigrationRate);
+                //RunScript(script);
 
-            //StaticWriter.Description = "Immigration.txt";
-            //StaticWriter.Log(Configuration.DumpHeuristicSettingsHeader());
-            //script = new GEOM20Script(ScriptType.ImmigrationRate);
-            //RunScript(script);
+                //StaticWriter.Description = "Tournament.txt";
+                //StaticWriter.Log(Configuration.DumpHeuristicSettingsHeader());
+                //var script = new GEOM20Script(ScriptType.TournamentSize);
+                //RunScript(script);
 
-            //StaticWriter.Description = "Tournament.txt";
-            //StaticWriter.Log(Configuration.DumpHeuristicSettingsHeader());
-            //var script = new GEOM20Script(ScriptType.TournamentSize);
-            //RunScript(script);
+                //StaticWriter.Description = "Mutations_fixed.txt";
+                //StaticWriter.Log(Configuration.DumpHeuristicSettingsHeader());
+                //var script = new GEOM20Script(ScriptType.ColorsCount);
+                //RunScript(script);
 
-            StaticWriter.Description = "Mutations_fixed.txt";
-            StaticWriter.Log(Configuration.DumpHeuristicSettingsHeader());
-            var script = new GEOM20Script(ScriptType.ColorsCount);
-            RunScript(script);
+                //StaticWriter.Description = "colors_count.txt";
+                //StaticWriter.Log(Configuration.DumpHeuristicSettingsHeader());
+                //var script = new GEOM20Script(ScriptType.ColorsCount);
+                //RunScript(script);
 
-            //StaticWriter.Description = "colors_count.txt";
-            //StaticWriter.Log(Configuration.DumpHeuristicSettingsHeader());
-            //var script = new GEOM20Script(ScriptType.ColorsCount);
-            //RunScript(script);
+            });
+            task.ContinueWith((t) =>
+            {
+                splitContainer1.Panel2.BackColor = Color.White;
+            });
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+
+            splitContainer1.Panel2.BackColor = Color.Yellow;
+            var task = Task.Run(() =>
+            {
+                IScript script;
+
+                StaticWriter.Description = "Mutation.txt";
+                StaticWriter.Log(Configuration.DumpHeuristicSettingsHeader());
+                script = new GEOM120Script(ScriptType.MutationRate);
+                RunScript(script);
+
+                StaticWriter.Description = "Mutation_Wide.txt";
+                StaticWriter.Log(Configuration.DumpHeuristicSettingsHeader());
+                script = new GEOM120Script(ScriptType.MutationRateWide);
+                RunScript(script);
+
+                StaticWriter.Description = "Crossover.txt";
+                StaticWriter.Log(Configuration.DumpHeuristicSettingsHeader());
+                script = new GEOM120Script(ScriptType.CrossoverRate);
+                RunScript(script);
+
+                StaticWriter.Description = "Alpha.txt";
+                StaticWriter.Log(Configuration.DumpHeuristicSettingsHeader());
+                script = new GEOM120Script(ScriptType.Alpha);
+                RunScript(script);
+
+                StaticWriter.Description = "Alpha_Wide.txt";
+                StaticWriter.Log(Configuration.DumpHeuristicSettingsHeader());
+                script = new GEOM120Script(ScriptType.AlphaWide);
+                RunScript(script);
+
+                StaticWriter.Description = "Immigration.txt";
+                StaticWriter.Log(Configuration.DumpHeuristicSettingsHeader());
+                script = new GEOM120Script(ScriptType.ImmigrationRate);
+                RunScript(script);
+
+                StaticWriter.Description = "Tournament.txt";
+                StaticWriter.Log(Configuration.DumpHeuristicSettingsHeader());
+                script = new GEOM120Script(ScriptType.TournamentSize);
+                RunScript(script);
+
+                StaticWriter.Description = "ColorsCount.txt";
+                StaticWriter.Log(Configuration.DumpHeuristicSettingsHeader());
+                script = new GEOM120Script(ScriptType.ColorsCount);
+                RunScript(script);
+
+                StaticWriter.Description = "Population.txt";
+                StaticWriter.Log(Configuration.DumpHeuristicSettingsHeader());
+                script = new GEOM120Script(ScriptType.PopulationSize);
+                RunScript(script);
+            });
+            task.ContinueWith((t) =>
+            {
+                splitContainer1.Panel2.BackColor = Color.White;
+            });
         }
     }
 }

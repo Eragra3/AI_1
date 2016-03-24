@@ -31,10 +31,8 @@ namespace AI_1.Logic
             LoadedGraph = graph;
         }
 
-        public Genotype RunHeuristic(int populationCount, int generationsCount, string logFilePath = null)
+        public Genotype RunHeuristic(int populationCount, int generationsCount, string logFilePath = null, bool openLogFile = false)
         {
-            var randomizer = new Randomizer();
-
             Genotype bestSolution = null;
 
             logFilePath = logFilePath ?? Configuration.GetLogFilePath;
@@ -45,14 +43,14 @@ namespace AI_1.Logic
 
             using (_writer = new StreamWriter(logFilePath, true))
             {
-                //Process.Start(logFilePath);
+                if (openLogFile) Process.Start(logFilePath);
 
                 Population.Clear();
                 NextPopulation.Clear();
 
                 for (int i = 0; i < populationCount; i++)
                 {
-                    var specimen = randomizer.GetRandomGenotype(LoadedGraph);
+                    var specimen = Randomizer.GetRandomGenotype(LoadedGraph);
 
                     Population.Add(specimen);
 
@@ -66,14 +64,13 @@ namespace AI_1.Logic
                 DumpGenerationHeader();
                 var flushCounter = 0;
 
-                Genotype newBestSolution = null;
                 var generationIndex = 0;
 
-                Genotype child1, child2, parent1, parent2;
                 for (generationIndex = 0; generationIndex < generationsCount; generationIndex++)
                 {
-                    for (int j = 0; j < populationCount / 2; j++)
+                    Parallel.For(0, populationCount/2, j =>
                     {
+                        Genotype child1, child2, parent1, parent2;
 
                         parent1 = StartTournament();
                         parent2 = null;
@@ -87,6 +84,7 @@ namespace AI_1.Logic
 
 
                         #region crossover
+
                         if (_random.NextDouble() < Configuration.CrossoverRate)
                         {
                             Tuple<Genotype, Genotype> children;
@@ -109,35 +107,49 @@ namespace AI_1.Logic
                             child1 = CloneSpecimen(parent1);
                             child2 = CloneSpecimen(parent2);
                         }
-                        #endregion 
+
+                        #endregion
 
 
                         #region mutation
+
                         switch (Configuration.MutationMethod)
                         {
                             case MutationMethods.RAND_INC:
                                 MutateRandomIncrement(child1);
                                 MutateRandomIncrement(child2);
                                 break;
+                            case MutationMethods.NORMAL:
+                                MutateNormalDistribution(child1);
+                                MutateNormalDistribution(child2);
+                                break;
+                            case MutationMethods.RANDOM:
+                                MutateRandom(child1);
+                                MutateRandom(child2);
+                                break;
                             default:
                                 throw new ArgumentOutOfRangeException();
                         }
+
                         #endregion
 
 
                         #region immigration
+
                         if (child1.IsWild = _random.NextDouble() < Configuration.ImmigrationRate)
                         {
-                            randomizer.InitialRoll(child1);
+                            Randomizer.InitialRoll(child1);
                         }
                         if (child2.IsWild = _random.NextDouble() < Configuration.ImmigrationRate)
                         {
-                            randomizer.InitialRoll(child2);
+                            Randomizer.InitialRoll(child2);
                         }
-                        #endregion  
+
+                        #endregion
 
 
                         #region check same speciman is already in population
+
                         int mutationsLeft = 5;
                         while (NextPopulation.ContainsSpecimen(child1) && mutationsLeft > 0)
                         {
@@ -153,11 +165,12 @@ namespace AI_1.Logic
                         }
                         if (mutationsLeft < 5 && NextPopulation.ContainsSpecimen(child1))
                         {
-                            randomizer.InitialRoll(child1);
+                            Randomizer.InitialRoll(child1);
                         }
-                        NextPopulation.Add(child1);
+                        NextPopulation.AddParallel(child1);
 
                         mutationsLeft = 5;
+
                         while (NextPopulation.ContainsSpecimen(child2) && mutationsLeft > 0)
                         {
                             switch (Configuration.MutationMethod)
@@ -172,23 +185,12 @@ namespace AI_1.Logic
                         }
                         if (mutationsLeft < 5 && NextPopulation.ContainsSpecimen(child2))
                         {
-                            randomizer.InitialRoll(child2);
+                            Randomizer.InitialRoll(child2);
                         }
-                        NextPopulation.Add(child2);
+                        NextPopulation.AddParallel(child2);
+
                         #endregion
-
-
-                        if (child2.IsValid() && child2.GetMaxColor() < (newBestSolution?.GetMaxColor() ?? int.MaxValue))
-                        {
-                            newBestSolution = child2;
-                        }
-
-                        if (child1.IsValid() && child1.GetMaxColor() < (newBestSolution?.GetMaxColor() ?? int.MaxValue))
-                        {
-                            newBestSolution = child1;
-                        }
-
-                    }
+                    });
 
                     flushCounter++;
                     if (flushCounter == 10)
@@ -197,15 +199,22 @@ namespace AI_1.Logic
                         _writer.Flush();
                     }
 
+
+                    foreach (var specimen in Population)
+                    {
+                        if (specimen.IsValid() &&
+                            specimen.GetMaxColor() < (bestSolution?.GetMaxColor() ?? int.MaxValue))
+                        {
+                            bestSolution = specimen;
+                        }
+                    }
+
                     DumpGenerationStatistics(Population, generationIndex, bestSolution);
 
                     var temp = Population;
                     Population = NextPopulation;
                     NextPopulation = temp;
                     NextPopulation.Clear();
-
-                    bestSolution = newBestSolution;
-
                 }
 
                 DumpGenerationStatistics(Population, generationIndex, bestSolution);
@@ -226,7 +235,7 @@ namespace AI_1.Logic
 
         private double DumpGenerationStatistics(
             IList<Genotype> population,
-            int generation, 
+            int generation,
             Genotype bestSolution)
         {
             Genotype bestSpecimen = null;

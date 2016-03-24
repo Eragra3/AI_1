@@ -4,11 +4,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AI_1.Helpers;
 
 namespace AI_1
 {
     public static class Configuration
     {
+
+        #region test variables
+
+        #endregion
+
+
         static Configuration()
         {
             SetDefaults();
@@ -20,10 +27,12 @@ namespace AI_1
                                               + DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss") + ".txt";
 
 
-        public static string GetExperimentLogFilePath(string fileName, string description = "")
+        public static string GetExperimentLogFilePath(string fileName)
         {
             var directory = "C:/School/AI_Resources/Logs/";
-            return directory + fileName + "/" +  description + "/" + DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss") + ".txt";
+            var subDir = StaticWriter.Description.Substring(0, StaticWriter.Description.IndexOf('.'));
+            //return directory + fileName + "/" +  description + "/" + DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss") + ".txt";
+            return directory + subDir + "/" + DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss") + ".txt";
         }
 
 
@@ -35,29 +44,29 @@ namespace AI_1
         public static readonly string GEOM120 = RESOURCES_PATH + "GEOM120.col";
 
 
-        public static CrossoverMethods CrossoverMethod { get; set; } = CrossoverMethods.POP;
-        public static MutationMethods MutationMethod { get; set; } = MutationMethods.RAND_INC;
+        public static CrossoverMethods CrossoverMethod { get; set; }
+        public static MutationMethods MutationMethod { get; set; }
 
-        public static double MutationRate { get; set; } 
-        public static double CrossoverRate { get; set; } 
+        public static double MutationRate { get; set; }
+        public static double CrossoverRate { get; set; }
         public static double ImmigrationRate { get; set; }
-        public static double MaxColorWeight { get; set; } 
-        public static int ColorsCount { get; set; } 
+        public static double MaxColorWeight { get; set; }
+        public static int ColorsCount { get; set; }
         //keep this value even, crossovers produce two childs
-        public static int PopulationCount { get; set; } 
+        public static int PopulationCount { get; set; }
         public static int GenerationsCount { get; set; }
         public static int SpecimensInTournament { get; set; }
 
         public static string SourceFilePath { get; set; }
 
-        public static readonly double MUTATION_RATE = 0.1;
-        public static readonly double IMMIGRATION_RATE = 0.00;
-        public static readonly double CROSSOVER_RATE = 0.95;
-        public static readonly double MAX_COLOR_WEIGHT = 0.2;
+        public static readonly double MUTATION_RATE = 0.007;
+        public static readonly double IMMIGRATION_RATE = 0;
+        public static readonly double CROSSOVER_RATE = 0.85;
+        public static readonly double MAX_COLOR_WEIGHT = 0;
         public static readonly int COLORS_COUNT = 45;
-        
-        public static readonly int POPULATION_COUNT = 300;
-        public static readonly int GENERATIONS_COUNT = 1000;
+
+        public static readonly int POPULATION_COUNT = 150;
+        public static readonly int GENERATIONS_COUNT = 3000;
         public static readonly int SPECIMENS_IN_TOURNAMENT = 10;
 
         public static void SetDefaults()
@@ -67,6 +76,7 @@ namespace AI_1
 
             MutationRate = MUTATION_RATE;
             ImmigrationRate = IMMIGRATION_RATE;
+            CrossoverRate = CROSSOVER_RATE;
             MaxColorWeight = MAX_COLOR_WEIGHT;
             ColorsCount = COLORS_COUNT;
             PopulationCount = POPULATION_COUNT;

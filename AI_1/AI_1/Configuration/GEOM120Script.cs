@@ -7,18 +7,17 @@ using AI_1.Models;
 
 namespace AI_1
 {
-    public class GEOM40Script : IScript
+    public class GEOM120Script : IScript
     {
         public IList<Experiment> Experiments { get; set; }
 
-        public string SourceFile { get; set; } = Configuration.GEOM40;
+        public string SourceFile { get; set; } = Configuration.GEOM120;
 
-        //MIN 28
-        //DEFAULT COLOR COUNT 45
-        public GEOM40Script(ScriptType type)
+        //DEFAULT COLOR COUNT 130
+        public GEOM120Script(ScriptType type)
         {
             var colorsCount = 45;
-            var repetitions = 10;
+            var repetitions = 3;
             var population = 300;
 
             switch (type)

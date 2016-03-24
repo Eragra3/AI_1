@@ -11,19 +11,19 @@ namespace AI_1.Models
     {
         private static int idCounter = 1;
 
-        public int ID { get; set; }
+        public int Id;
 
-        public Edge[] Edges { get; set; }
+        public Edge[] Edges;
 
-        public Gene[] Genes { get; set; }
+        public Gene[] Genes;
 
-        public int MaxID { get; set; }
+        public int MaxID;
 
-        public bool IsWild { get; set; }
+        public bool IsWild;
 
         public Genotype(Edge[] edges, IList<int> verticesIds, int maxID)
         {
-            ID = idCounter++;
+            Id = idCounter++;
 
             Edges = edges;
 
@@ -39,7 +39,7 @@ namespace AI_1.Models
 
         public Genotype(Edge[] edges, int maxID)
         {
-            ID = idCounter++;
+            Id = idCounter++;
 
             Edges = edges;
 

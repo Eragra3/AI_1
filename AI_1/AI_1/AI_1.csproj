@@ -57,6 +57,7 @@
     <Compile Include="Configuration\Configuration.cs" />
     <Compile Include="Configuration\GEOM20Script.cs" />
     <Compile Include="Configuration\GEOM40Script.cs" />
+    <Compile Include="Configuration\GEOM120Script.cs" />
     <Compile Include="Configuration\GEOM70Script.cs" />
     <Compile Include="Configuration\IScript.cs" />
     <Compile Include="Enums\GAMethodsEnums.cs" />

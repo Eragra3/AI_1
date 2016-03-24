@@ -7,12 +7,26 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using MathNet.Numerics.Random;
 
 namespace AI_1.Logic
 {
     public partial class GAExecutor
     {
-        private static readonly Random _random = new Random();
+        [ThreadStatic]
+        private static Random _threadLocalRandom;
+
+        private static Random _random
+        {
+            get
+            {
+                if (_threadLocalRandom == null)
+                {
+                    _threadLocalRandom = new Random();
+                }
+                return _threadLocalRandom;
+            }
+        }
 
         public static string GetDumpHeader()
         {
@@ -50,7 +64,7 @@ namespace AI_1.Logic
 
                 if (!edge.IsValidWithColors(color1, color2))
                 {
-                    penalty += edge.Weight;
+                    penalty += edge.Weight - Math.Abs(color1 - color2);
                 }
             }
             return penalty;
@@ -95,19 +109,6 @@ namespace AI_1.Logic
             return new Tuple<Genotype, Genotype>(child1, child2);
         }
 
-        public Genotype CloneSpecimen(Genotype specimen)
-        {
-            var clone = new Genotype(LoadedGraph.Edges, LoadedGraph.VerticesIds, specimen.MaxID);
-
-            foreach (var gene in specimen.Genes)
-            {
-                if (gene == null) continue;
-                clone.Genes[gene.id].color = gene.color;
-            }
-
-            return clone;
-        }
-
         public Tuple<Genotype, Genotype> CrossoverMOX(Genotype parent1, Genotype parent2)
         {
             var genesPool = parent1.Genes.Skip(1).Concat(parent2.Genes.Skip(1)).ToList();
@@ -139,34 +140,77 @@ namespace AI_1.Logic
                 if (!(_random.NextDouble() < Configuration.MutationRate) ||
                     gene == null) continue;
 
-                var colorIncr = _random.Next(0, 100);
+                bool increment;
+                int colorIncr;
+                do
+                {
+                    var pseudoNormalDistribution = _random.Next(0, 100);
+                    increment = _random.Next(0, 2) > 0;
 
-                if (colorIncr < 45)
-                {
-                    colorIncr = 1;
-                }
-                else if (colorIncr < 67)
-                {
-                    colorIncr = 2;
-                }
-                else if (colorIncr < 90)
-                {
-                    colorIncr = 3;
-                }
-                else
-                {
-                    colorIncr = 4;
-                }
+                    if (pseudoNormalDistribution < 45)
+                    {
+                        colorIncr = 1;
+                    }
+                    else if (pseudoNormalDistribution < 67)
+                    {
+                        colorIncr = 2;
+                    }
+                    else if (pseudoNormalDistribution < 90)
+                    {
+                        colorIncr = 3;
+                    }
+                    else
+                    {
+                        colorIncr = 4;
+                    }
+                } while (increment ? gene.color + colorIncr > Configuration.ColorsCount : gene.color - colorIncr < 1);
 
-                if (_random.Next(0, 2) > 0)
+                if (increment)
                 {
                     gene.color += colorIncr;
-                    gene.color = Math.Min(gene.color, Configuration.ColorsCount);
                 }
                 {
                     gene.color -= colorIncr;
-                    gene.color = Math.Max(gene.color, 0);
                 }
+            }
+        }
+        public double GetRandomNormalDistribution(int max)
+        {
+            var _random = new Random();
+
+            var n = Math.Min((1 / _random.NextDouble() - 1) * 0.1, 1);
+            //n = Math.Pow(n, 0.7);
+
+            return n * max;
+        }
+
+        public void MutateNormalDistribution(Genotype specimen)
+        {
+            foreach (var gene in specimen.Genes)
+            {
+                if (!(_random.NextDouble() < Configuration.MutationRate) ||
+                    gene == null) continue;
+
+                var colorsToMax = Configuration.ColorsCount - gene.color;
+
+                if (_random.Next(0, 2) > 0)
+                {
+                    gene.color += (int)(GetRandomNormalDistribution(colorsToMax) + 1);
+                }
+                {
+                    gene.color -= (int)(GetRandomNormalDistribution(gene.color) + 1);
+                }
+            }
+        }
+
+        public void MutateRandom(Genotype specimen)
+        {
+            foreach (var gene in specimen.Genes)
+            {
+                if (!(_random.NextDouble() < Configuration.MutationRate) ||
+                    gene == null) continue;
+
+                gene.color = _random.Next(0, Configuration.ColorsCount);
             }
         }
 
@@ -208,6 +252,19 @@ namespace AI_1.Logic
             }
 
             return bestSpecimen;
+        }
+
+        public Genotype CloneSpecimen(Genotype specimen)
+        {
+            var clone = new Genotype(LoadedGraph.Edges, LoadedGraph.VerticesIds, specimen.MaxID);
+
+            foreach (var gene in specimen.Genes)
+            {
+                if (gene == null) continue;
+                clone.Genes[gene.id].color = gene.color;
+            }
+
+            return clone;
         }
     }
 }

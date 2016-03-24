@@ -16,9 +16,11 @@ namespace AI_1
     public enum ScriptType
     {
         MutationRate,
+        MutationRateWide,
         CrossoverRate,
         TournamentSize,
         Alpha,
+        AlphaWide,
         ImmigrationRate,
         ColorsCount,
         PopulationSize

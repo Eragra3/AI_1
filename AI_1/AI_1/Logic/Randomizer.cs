@@ -13,15 +13,22 @@ namespace AI_1.Logic
 {
     public class Randomizer
     {
-        private static readonly Random _staticRng = new Random();
-        private readonly Random _random;
+        [ThreadStatic]
+        private static Random _threadLocalRandom;
 
-        public Randomizer()
+        private static Random _random
         {
-            _random = new Random();
+            get
+            {
+                if (_threadLocalRandom == null)
+                {
+                    _threadLocalRandom = new Random();
+                }
+                return _threadLocalRandom;
+            }
         }
 
-        public Genotype GetRandomGenotype(Graph graph)
+        public static Genotype GetRandomGenotype(Graph graph)
         {
             var genotype = new Genotype(graph.Edges, graph.VerticesIds, graph.MaxVertexID);
 
@@ -30,7 +37,7 @@ namespace AI_1.Logic
             return genotype;
         }
 
-        public void InitialRoll(Genotype genotype)
+        public static void InitialRoll(Genotype genotype)
         {
             foreach (int i in Enumerable.Range(0, genotype.Edges.Length).OrderBy(x => _random.Next()))
             {
@@ -70,7 +77,7 @@ namespace AI_1.Logic
             }
         }
 
-        private Tuple<int, int> GetRandomColors(int weight)
+        private static Tuple<int, int> GetRandomColors(int weight)
         {
             var color1 = GetRandomColor();
             int color2 = GetRandomColor();
@@ -78,10 +85,9 @@ namespace AI_1.Logic
             return new Tuple<int, int>(color1, color2);
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int GetRandomColor()
         {
-            return _staticRng.Next(1, Configuration.ColorsCount + 1);
+            return _random.Next(1, Configuration.ColorsCount + 1);
         }
     }
 }
