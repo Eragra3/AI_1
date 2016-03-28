@@ -238,45 +238,45 @@ namespace AI_1
             {
                 IScript script;
 
-                StaticWriter.Description = "Mutation.txt";
-                StaticWriter.Log(Configuration.DumpHeuristicSettingsHeader());
-                script = new GEOM120Script(ScriptType.MutationRate);
-                RunScript(script);
+                //StaticWriter.Description = "Mutation.txt";
+                //StaticWriter.Log(Configuration.DumpHeuristicSettingsHeader());
+                //script = new GEOM120Script(ScriptType.MutationRate);
+                //RunScript(script);
 
-                StaticWriter.Description = "Mutation_Wide.txt";
-                StaticWriter.Log(Configuration.DumpHeuristicSettingsHeader());
-                script = new GEOM120Script(ScriptType.MutationRateWide);
-                RunScript(script);
+                //StaticWriter.Description = "Mutation_Wide.txt";
+                //StaticWriter.Log(Configuration.DumpHeuristicSettingsHeader());
+                //script = new GEOM120Script(ScriptType.MutationRateWide);
+                //RunScript(script);
 
-                StaticWriter.Description = "Crossover.txt";
-                StaticWriter.Log(Configuration.DumpHeuristicSettingsHeader());
-                script = new GEOM120Script(ScriptType.CrossoverRate);
-                RunScript(script);
+                //StaticWriter.Description = "Crossover.txt";
+                //StaticWriter.Log(Configuration.DumpHeuristicSettingsHeader());
+                //script = new GEOM120Script(ScriptType.CrossoverRate);
+                //RunScript(script);
 
-                StaticWriter.Description = "Alpha.txt";
-                StaticWriter.Log(Configuration.DumpHeuristicSettingsHeader());
-                script = new GEOM120Script(ScriptType.Alpha);
-                RunScript(script);
+                //StaticWriter.Description = "Alpha.txt";
+                //StaticWriter.Log(Configuration.DumpHeuristicSettingsHeader());
+                //script = new GEOM120Script(ScriptType.Alpha);
+                //RunScript(script);
 
-                StaticWriter.Description = "Alpha_Wide.txt";
-                StaticWriter.Log(Configuration.DumpHeuristicSettingsHeader());
-                script = new GEOM120Script(ScriptType.AlphaWide);
-                RunScript(script);
+                //StaticWriter.Description = "Alpha_Wide.txt";
+                //StaticWriter.Log(Configuration.DumpHeuristicSettingsHeader());
+                //script = new GEOM120Script(ScriptType.AlphaWide);
+                //RunScript(script);
 
-                StaticWriter.Description = "Immigration.txt";
-                StaticWriter.Log(Configuration.DumpHeuristicSettingsHeader());
-                script = new GEOM120Script(ScriptType.ImmigrationRate);
-                RunScript(script);
+                //StaticWriter.Description = "Immigration.txt";
+                //StaticWriter.Log(Configuration.DumpHeuristicSettingsHeader());
+                //script = new GEOM120Script(ScriptType.ImmigrationRate);
+                //RunScript(script);
 
                 StaticWriter.Description = "Tournament.txt";
                 StaticWriter.Log(Configuration.DumpHeuristicSettingsHeader());
                 script = new GEOM120Script(ScriptType.TournamentSize);
                 RunScript(script);
 
-                StaticWriter.Description = "ColorsCount.txt";
-                StaticWriter.Log(Configuration.DumpHeuristicSettingsHeader());
-                script = new GEOM120Script(ScriptType.ColorsCount);
-                RunScript(script);
+                //StaticWriter.Description = "ColorsCount.txt";
+                //StaticWriter.Log(Configuration.DumpHeuristicSettingsHeader());
+                //script = new GEOM120Script(ScriptType.ColorsCount);
+                //RunScript(script);
 
                 StaticWriter.Description = "Population.txt";
                 StaticWriter.Log(Configuration.DumpHeuristicSettingsHeader());

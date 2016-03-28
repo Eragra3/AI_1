@@ -59,14 +59,14 @@ namespace AI_1
 
         public static string SourceFilePath { get; set; }
 
-        public static readonly double MUTATION_RATE = 0.007;
+        public static readonly double MUTATION_RATE = 0.02;
         public static readonly double IMMIGRATION_RATE = 0;
-        public static readonly double CROSSOVER_RATE = 0.85;
-        public static readonly double MAX_COLOR_WEIGHT = 0;
+        public static readonly double CROSSOVER_RATE = 0.95;
+        public static readonly double MAX_COLOR_WEIGHT = 0.01;
         public static readonly int COLORS_COUNT = 45;
 
-        public static readonly int POPULATION_COUNT = 150;
-        public static readonly int GENERATIONS_COUNT = 3000;
+        public static readonly int POPULATION_COUNT = 300;
+        public static readonly int GENERATIONS_COUNT = 1000;
         public static readonly int SPECIMENS_IN_TOURNAMENT = 10;
 
         public static void SetDefaults()
@@ -113,9 +113,9 @@ namespace AI_1
         {
             var sb = new StringBuilder();
 
-            sb.Append("best_solution;mutation_rate;crossover_rate;immigration_rate;fitness_alpha;" +
+            sb.Append("best_solution;first_gen_with_solution;mutation_rate;crossover_rate;immigration_rate;fitness_alpha;" +
                       "max_color;populaton;generations;specimens_in_tournament;" +
-                      "crossover_method;mutation_method");
+                      "crossover_method;mutation_method;log_file_path");
 
             return sb.ToString();
         }

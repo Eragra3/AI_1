@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.ExceptionServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -41,6 +42,8 @@ namespace AI_1.Logic
 
             Directory.CreateDirectory(logFilePath.Substring(0, lastSlash));
 
+            int firstGenerationWithSolution = -1;
+
             using (_writer = new StreamWriter(logFilePath, true))
             {
                 if (openLogFile) Process.Start(logFilePath);
@@ -68,129 +71,129 @@ namespace AI_1.Logic
 
                 for (generationIndex = 0; generationIndex < generationsCount; generationIndex++)
                 {
-                    Parallel.For(0, populationCount/2, j =>
-                    {
-                        Genotype child1, child2, parent1, parent2;
+                    Parallel.For(0, populationCount / 2, j =>
+                      {
+                          Genotype child1, child2, parent1, parent2;
 
-                        parent1 = StartTournament();
-                        parent2 = null;
-                        while (parent2 == null || parent1 == parent2)
-                        {
-                            parent2 = StartTournament();
-                        }
+                          parent1 = StartTournament();
+                          parent2 = null;
+                          while (parent2 == null || parent1 == parent2)
+                          {
+                              parent2 = StartTournament();
+                          }
 
-                        child1 = null;
-                        child2 = null;
-
-
-                        #region crossover
-
-                        if (_random.NextDouble() < Configuration.CrossoverRate)
-                        {
-                            Tuple<Genotype, Genotype> children;
-                            switch (Configuration.CrossoverMethod)
-                            {
-                                case CrossoverMethods.POP:
-                                    children = CrossoverPOP(parent1, parent2);
-                                    child1 = children.Item1;
-                                    child2 = children.Item2;
-                                    break;
-                                case CrossoverMethods.MOX:
-                                    children = CrossoverMOX(parent1, parent2);
-                                    child1 = children.Item1;
-                                    child2 = children.Item2;
-                                    break;
-                            }
-                        }
-                        else
-                        {
-                            child1 = CloneSpecimen(parent1);
-                            child2 = CloneSpecimen(parent2);
-                        }
-
-                        #endregion
+                          child1 = null;
+                          child2 = null;
 
 
-                        #region mutation
+                          #region crossover
 
-                        switch (Configuration.MutationMethod)
-                        {
-                            case MutationMethods.RAND_INC:
-                                MutateRandomIncrement(child1);
-                                MutateRandomIncrement(child2);
-                                break;
-                            case MutationMethods.NORMAL:
-                                MutateNormalDistribution(child1);
-                                MutateNormalDistribution(child2);
-                                break;
-                            case MutationMethods.RANDOM:
-                                MutateRandom(child1);
-                                MutateRandom(child2);
-                                break;
-                            default:
-                                throw new ArgumentOutOfRangeException();
-                        }
+                          if (_random.NextDouble() < Configuration.CrossoverRate)
+                          {
+                              Tuple<Genotype, Genotype> children;
+                              switch (Configuration.CrossoverMethod)
+                              {
+                                  case CrossoverMethods.POP:
+                                      children = CrossoverPOP(parent1, parent2);
+                                      child1 = children.Item1;
+                                      child2 = children.Item2;
+                                      break;
+                                  case CrossoverMethods.MOX:
+                                      children = CrossoverMOX(parent1, parent2);
+                                      child1 = children.Item1;
+                                      child2 = children.Item2;
+                                      break;
+                              }
+                          }
+                          else
+                          {
+                              child1 = CloneSpecimen(parent1);
+                              child2 = CloneSpecimen(parent2);
+                          }
 
-                        #endregion
-
-
-                        #region immigration
-
-                        if (child1.IsWild = _random.NextDouble() < Configuration.ImmigrationRate)
-                        {
-                            Randomizer.InitialRoll(child1);
-                        }
-                        if (child2.IsWild = _random.NextDouble() < Configuration.ImmigrationRate)
-                        {
-                            Randomizer.InitialRoll(child2);
-                        }
-
-                        #endregion
+                          #endregion
 
 
-                        #region check same speciman is already in population
+                          #region mutation
 
-                        int mutationsLeft = 5;
-                        while (NextPopulation.ContainsSpecimen(child1) && mutationsLeft > 0)
-                        {
-                            switch (Configuration.MutationMethod)
-                            {
-                                case MutationMethods.RAND_INC:
-                                    MutateRandomIncrement(child1);
-                                    break;
-                                default:
-                                    throw new ArgumentOutOfRangeException();
-                            }
-                            mutationsLeft--;
-                        }
-                        if (mutationsLeft < 5 && NextPopulation.ContainsSpecimen(child1))
-                        {
-                            Randomizer.InitialRoll(child1);
-                        }
-                        NextPopulation.AddParallel(child1);
+                          switch (Configuration.MutationMethod)
+                          {
+                              case MutationMethods.RAND_INC:
+                                  MutateRandomIncrement(child1);
+                                  MutateRandomIncrement(child2);
+                                  break;
+                              case MutationMethods.NORMAL:
+                                  MutateNormalDistribution(child1);
+                                  MutateNormalDistribution(child2);
+                                  break;
+                              case MutationMethods.RANDOM:
+                                  MutateRandom(child1);
+                                  MutateRandom(child2);
+                                  break;
+                              default:
+                                  throw new ArgumentOutOfRangeException();
+                          }
 
-                        mutationsLeft = 5;
+                          #endregion
 
-                        while (NextPopulation.ContainsSpecimen(child2) && mutationsLeft > 0)
-                        {
-                            switch (Configuration.MutationMethod)
-                            {
-                                case MutationMethods.RAND_INC:
-                                    MutateRandomIncrement(child2);
-                                    break;
-                                default:
-                                    throw new ArgumentOutOfRangeException();
-                            }
-                            mutationsLeft--;
-                        }
-                        if (mutationsLeft < 5 && NextPopulation.ContainsSpecimen(child2))
-                        {
-                            Randomizer.InitialRoll(child2);
-                        }
-                        NextPopulation.AddParallel(child2);
 
-                        #endregion
-                    });
+                          #region immigration
+
+                          if (child1.IsWild = _random.NextDouble() < Configuration.ImmigrationRate)
+                          {
+                              Randomizer.InitialRoll(child1);
+                          }
+                          if (child2.IsWild = _random.NextDouble() < Configuration.ImmigrationRate)
+                          {
+                              Randomizer.InitialRoll(child2);
+                          }
+
+                          #endregion
+
+
+                          #region check same speciman is already in population
+
+                          int mutationsLeft = 5;
+                          while (NextPopulation.ContainsSpecimen(child1) && mutationsLeft > 0)
+                          {
+                              switch (Configuration.MutationMethod)
+                              {
+                                  case MutationMethods.RAND_INC:
+                                      MutateRandomIncrement(child1);
+                                      break;
+                                  default:
+                                      throw new ArgumentOutOfRangeException();
+                              }
+                              mutationsLeft--;
+                          }
+                          if (mutationsLeft < 5 && NextPopulation.ContainsSpecimen(child1))
+                          {
+                              Randomizer.InitialRoll(child1);
+                          }
+                          NextPopulation.AddParallel(child1);
+
+                          mutationsLeft = 5;
+
+                          while (NextPopulation.ContainsSpecimen(child2) && mutationsLeft > 0)
+                          {
+                              switch (Configuration.MutationMethod)
+                              {
+                                  case MutationMethods.RAND_INC:
+                                      MutateRandomIncrement(child2);
+                                      break;
+                                  default:
+                                      throw new ArgumentOutOfRangeException();
+                              }
+                              mutationsLeft--;
+                          }
+                          if (mutationsLeft < 5 && NextPopulation.ContainsSpecimen(child2))
+                          {
+                              Randomizer.InitialRoll(child2);
+                          }
+                          NextPopulation.AddParallel(child2);
+
+                          #endregion
+                      });
 
                     flushCounter++;
                     if (flushCounter == 10)
@@ -209,6 +212,11 @@ namespace AI_1.Logic
                         }
                     }
 
+                    if (bestSolution != null && firstGenerationWithSolution == -1)
+                    {
+                        firstGenerationWithSolution = generationIndex;
+                    }
+
                     DumpGenerationStatistics(Population, generationIndex, bestSolution);
 
                     var temp = Population;
@@ -219,12 +227,21 @@ namespace AI_1.Logic
 
                 DumpGenerationStatistics(Population, generationIndex, bestSolution);
 
-                StaticWriter.Log((bestSolution?.GetMaxColor() ?? -1) + ";" + Configuration.DumpCurrentHeuristicSettings());
+                StaticWriter.Log((bestSolution?.GetMaxColor() ?? -1) + ";" +
+                    firstGenerationWithSolution + ";" +
+                    Configuration.DumpCurrentHeuristicSettings() + ";" +
+                    logFilePath);
 
                 _writer.Flush();
             }
 
-            return bestSolution;
+            var specimenStatistics = new GenotypeStatistics()
+            {
+                Genotype = bestSolution,
+                FirstGenerationWithSolution = firstGenerationWithSolution
+            };
+
+            return specimenStatistics;
         }
 
         private void DumpGenerationHeader()

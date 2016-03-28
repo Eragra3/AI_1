@@ -64,7 +64,8 @@ namespace AI_1.Logic
 
                 if (!edge.IsValidWithColors(color1, color2))
                 {
-                    penalty += edge.Weight - Math.Abs(color1 - color2);
+                    penalty++;
+                    //penalty += edge.Weight - Math.Abs(color1 - color2);
                 }
             }
             return penalty;
@@ -111,22 +112,28 @@ namespace AI_1.Logic
 
         public Tuple<Genotype, Genotype> CrossoverMOX(Genotype parent1, Genotype parent2)
         {
-            var genesPool = parent1.Genes.Skip(1).Concat(parent2.Genes.Skip(1)).ToList();
+            var genesPool = parent1.Genes.Concat(parent2.Genes).ToArray();
             genesPool.Shuffle();
 
-            var child1 = new Genotype(LoadedGraph.Edges, parent1.MaxID);
-            var child2 = new Genotype(LoadedGraph.Edges, parent1.MaxID);
+            var child1 = new Genotype(LoadedGraph.Edges, LoadedGraph.VerticesIds, parent1.MaxID);
+            var child2 = new Genotype(LoadedGraph.Edges, LoadedGraph.VerticesIds, parent1.MaxID);
 
-            for (int i = 0; i < genesPool.Count; i++)
+            var firstChildIds = new List<int>(child1.Genes.Length);
+
+            for (int i = 0; i < genesPool.Length; i++)
             {
                 var gene = genesPool[i];
-                if (child2.Genes[gene.id] == null)
+                if (gene != null)
                 {
-                    child2.Genes[gene.id] = gene;
-                }
-                else
-                {
-                    child1.Genes[gene.id] = gene;
+                    if (!firstChildIds.Contains(gene.id))
+                    {
+                        child1.Genes[gene.id].color = gene.color;
+                        firstChildIds.Add(gene.id);
+                    }
+                    else
+                    {
+                        child2.Genes[gene.id].color = gene.color;
+                    }
                 }
             }
 
