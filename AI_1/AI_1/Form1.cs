@@ -288,5 +288,28 @@ namespace AI_1
                 splitContainer1.Panel2.BackColor = Color.White;
             });
         }
+
+        private void randomizeButton_Click(object sender, EventArgs e)
+        {
+            splitContainer1.Panel2.BackColor = Color.Yellow;
+            var task = Task.Run(() =>
+            {
+                var parse = new COLReader();
+
+                var usedFile = Configuration.GEOM120;
+                var graph = parse.ParseFile(usedFile);
+                Configuration.SourceFilePath = usedFile;
+
+                var executor = new GreedyExecutor(graph);
+
+                var solution = executor.GetSolution(openLogFile: true);
+
+                Console.WriteLine(solution?.Dump() ?? string.Empty);
+            });
+            task.ContinueWith((t) =>
+            {
+                splitContainer1.Panel2.BackColor = Color.White;
+            });
+        }
     }
 }

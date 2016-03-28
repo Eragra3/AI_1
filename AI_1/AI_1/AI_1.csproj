@@ -72,6 +72,7 @@
     <Compile Include="Helpers\StaticWriter.cs" />
     <Compile Include="Logic\GAExecutor.cs" />
     <Compile Include="Logic\GAMethods.cs" />
+    <Compile Include="Logic\GreedyExecutor.cs" />
     <Compile Include="Logic\Randomizer.cs" />
     <Compile Include="Models\Edge.cs" />
     <Compile Include="Models\Experiment.cs" />

@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.button4 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.StartGEOM70ScriptButton = new System.Windows.Forms.Button();
@@ -40,7 +41,6 @@
             this.startAlgorithmButton = new System.Windows.Forms.Button();
             this.randomizeButton = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
-            this.button4 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -72,6 +72,16 @@
             this.splitContainer1.Size = new System.Drawing.Size(886, 484);
             this.splitContainer1.SplitterDistance = 295;
             this.splitContainer1.TabIndex = 1;
+            // 
+            // button4
+            // 
+            this.button4.Location = new System.Drawing.Point(6, 209);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(179, 23);
+            this.button4.TabIndex = 11;
+            this.button4.Text = "button4";
+            this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
             // button3
             // 
@@ -169,8 +179,9 @@
             this.randomizeButton.Name = "randomizeButton";
             this.randomizeButton.Size = new System.Drawing.Size(289, 23);
             this.randomizeButton.TabIndex = 1;
-            this.randomizeButton.Text = "Randomize";
+            this.randomizeButton.Text = "Start Greedy Algorithm";
             this.randomizeButton.UseVisualStyleBackColor = true;
+            this.randomizeButton.Click += new System.EventHandler(this.randomizeButton_Click);
             // 
             // button1
             // 
@@ -180,16 +191,6 @@
             this.button1.TabIndex = 0;
             this.button1.Text = "Read File";
             this.button1.UseVisualStyleBackColor = true;
-            // 
-            // button4
-            // 
-            this.button4.Location = new System.Drawing.Point(6, 209);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(179, 23);
-            this.button4.TabIndex = 11;
-            this.button4.Text = "button4";
-            this.button4.UseVisualStyleBackColor = true;
-            this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
             // Form1
             // 

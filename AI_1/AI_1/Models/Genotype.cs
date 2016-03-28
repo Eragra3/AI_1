@@ -127,7 +127,7 @@ namespace AI_1.Models
             var isValid = invalidEdges == 0;
             var isValidText = isValid ? 1 : 0;
 
-            var text = string.Format("{0},{1},{2},{3},{4}",
+            var text = string.Format("c:{0},k:{1},val:{2},fit:{3},inv:{4}",
                 colors,
                 k,
                 isValidText,
